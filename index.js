@@ -1,10 +1,13 @@
-var express = require('express');
-var app = express();
+const app = require('express')();
 
-app.post('/', function (req, res) {
-  res.send('{name:Gustavo,lastname:Bustamante}');
-});
+const server = require('http').createServer(app);
 
-app.listen(5000, function () {
-  console.log('Example app listening on port 3000!');
-});
+const io = require('socket.io')(server);
+
+var msg = {username:'Pepe',message:'Hola'};
+
+io.on('connection', (client) => {
+	client.emit('gustavo',JSON.stringify(msg));
+ });
+
+server.listen(5000);
