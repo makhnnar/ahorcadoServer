@@ -9,21 +9,33 @@ app.get('/', function(req, res){
 
 const PLAYERSTATE = {'sin jugar','esperando','jugando'};
 var contClientes=0;
-socket.prioridad=0;
-socket.numero=0;
 var clientesOnline = [];
 var partidas = [];
-  
-var newPartida = {jugador1:0,jugador2:0};
+var newPartida = {jugador1:0,jugador2:0,apuesta1:0,apuesta2:0};
+var obtenerInfoPlayer = {};
 
 io.on('connection', function(socket){
   
   contClientes++;
   socket.prioridad=1;
-  socket.numero++;
+  socket.numero = contClientes;
   socket.estado=PLAYERSTATE[0];
   clientesOnline.push(socket);
 
+  emparejarJugadores();
+  
+  socket.emit('enviarCliente',{data:'Bienvenido cliente '+contClientes});
+  
+  socket.on('enviarServer', function(msg){
+  	console.log('recibiendo servidor: '+msg);
+    io.emit('enviarCliente', {data:msg});
+  });
+    
+});
+
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
 
 var emparejarJugadores=function(){
   var newPlayer = buscarJugadorYCambiarStado();
@@ -63,14 +75,3 @@ var buscarJugadorYCambiarStado=function(){
     }
     return encontrado;
 }
-
-  socket.emit('enviarCliente',{data:'Bienvenido cliente '+contClientes});
-  socket.on('enviarServer', function(msg){
-  	console.log('recibiendo servidor: '+msg);
-    io.emit('enviarCliente', {data:msg});
-  });
-});
-
-http.listen(3000, function(){
-  console.log('listening on *:3000');
-});

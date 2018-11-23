@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>Servidor Ruleta</title>
     <style>
       body { 
         font: 13px Helvetica, Arial;
@@ -71,6 +71,12 @@
             document.getElementById('messages').appendChild(node);
         });
       })();
+
+      socket.on('jugar',function(msg){
+                  
+            
+      });
+
       var enviar = function(){
         var textoMsg = document.getElementById('m').value;
         console.log('enviando: '+textoMsg);
