@@ -26,9 +26,52 @@ io.on('connection', function(socket){
   socket.emit('enviarCliente',{data:'Bienvenido cliente '+contClientes});
   
   socket.on('enviarServer',function(msg){
+    var numeroAleatorio = msg.numeroAleatorio;
+    var numeroJugador = msg.numero;
+    for (var j = 0; j < partidas.length; j++) {
 
+        if (partidas[j].jugador1 === numeroJugador){
+                partidas[j].apuesta1=numeroAleatorio;
+
+            }else if (partidas[j].jugador2 === numeroJugador) {
+                partidas[j].apuesta2=numeroAleatorio;
+            
+            }
+    }
+
+    if (partidas[j].apuesta1!==0) {
+            //comparo
+            if (partidas[j].apuesta1>numeroAleatorio) {
+                
+            }else if(numeroAleatorio>partidas[j].apuesta1){
+
+            }else{
+              //empate
+            }
+          }else if(partidas[j].apuesta2!==0){
+          //comparo
+          if (partidas[j].apuesta2>numeroAleatorio) {
+
+            }else if(numeroAleatorio>partidas[j].apuesta2){
+
+            }else{
+              //empate
+            }
+        }else{
+            if (partidas[j].jugador1 === numeroJugador){
+                partidas[j].apuesta1=numeroAleatorio;
+
+            }else if (partidas[j].jugador2 === numeroJugador) {
+                partidas[j].apuesta2=numeroAleatorio;
+
+            }
+          //guardo mi valor donde corresponde
+        }   
+    //recorrer el arreglo de partidas para buscar en que partida estoy
+    //verifico si ya existe en la partida el valor 1 o el valor 2
+    //sino existe ninguno, guardo el valor que llego donde corresponda
+    //si existe comparo con el valor guardado y determino quien gana
   });
-
   socket.on('enviarServer', function(msg){
   	console.log('recibiendo servidor: '+msg);
     io.emit('enviarCliente', {data:msg});
@@ -53,7 +96,9 @@ var emparejarJugadores=function(){
       if(newPartida.jugador1!==0 && newPartida.jugador2!==0){
         partidas.push({
           jugador1:newPartida.jugador1,
-          jugador2:newPartida.jugador2
+          jugador2:newPartida.jugador2,
+          apuesta1:0,
+          apuesta2:0
         });
         posicion1=buscarPosicion(newPartida.jugador1);
         clientesOnline[posicion1].emit('jugar',{id:clientesOnline[posicion1].id,numero:socket.numero});
@@ -84,7 +129,6 @@ var buscarJugadorYCambiarStado=function(){
     }
     return encontrado;
 };
-
 var buscarPosicion=function(numero){
     var posicion1;
       for (var x = 0; x < clientesOnline.length; x++) {

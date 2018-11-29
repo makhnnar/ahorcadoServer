@@ -33,7 +33,7 @@
               var numeroAleatorio=Math.trunc(Math.random()*50+1);
               console.log('enviando: '+numeroAleatorio);
               socket.emit('enviarServer',{numero:msg.numero,numeroAleatorio:numeroAleatorio});
-           },3000);
+           },Math.trunc(Math.random()*9+1)*1000);
 
       });
       var enviar = function(){
