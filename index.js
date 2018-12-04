@@ -6,8 +6,7 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
-
-const PLAYERSTATE = {'sin jugar','esperando','jugando'};
+var PLAYERSTATE = ["sin jugar","esperando","jugando"];
 var contClientes = 0;
 var clientesOnline = [];
 var partidas = [];
@@ -18,7 +17,7 @@ io.on('connection', function(socket){
   contClientes++;
   socket.prioridad=1;
   socket.numero = contClientes;
-  socket.estado=PLAYERSTATE[0];
+  socket.estado = PLAYERSTATE[0];
   clientesOnline.push(socket);
 
   emparejarJugadores();
@@ -26,43 +25,47 @@ io.on('connection', function(socket){
   socket.emit('enviarCliente',{data:'Bienvenido cliente '+contClientes});
   
   socket.on('enviarServer',function(msg){
+    var indicePartida;
     var numeroAleatorio = msg.numeroAleatorio;
     var numeroJugador = msg.numero;
+
+    console.log('Este es el numero aleatorio '+numeroAleatorio+'numero de jugador '+numeroJugador);
+    for (var k = ; k < partidas.length; k++) {
+        console.log(partidas[k]);
+    }
+    
     for (var j = 0; j < partidas.length; j++) {
-
         if (partidas[j].jugador1 === numeroJugador){
-                partidas[j].apuesta1=numeroAleatorio;
-
+                indicePartida=j;
             }else if (partidas[j].jugador2 === numeroJugador) {
-                partidas[j].apuesta2=numeroAleatorio;
-            
+                indicePartida=j;
             }
     }
 
-    if (partidas[j].apuesta1!==0) {
+    if (partidas[indicePartida].apuesta1 !== 0) {
             //comparo
-            if (partidas[j].apuesta1>numeroAleatorio) {
+            if (partidas[indicePartida].apuesta1 > numeroAleatorio) {
                 
-            }else if(numeroAleatorio>partidas[j].apuesta1){
+            }else if(numeroAleatorio > partidas[indicePartida].apuesta1){
 
             }else{
               //empate
             }
-          }else if(partidas[j].apuesta2!==0){
+          }else if(partidas[indicePartida].apuesta2 !== 0){
           //comparo
-          if (partidas[j].apuesta2>numeroAleatorio) {
+          if (partidas[indicePartida].apuesta2 > numeroAleatorio) {
 
-            }else if(numeroAleatorio>partidas[j].apuesta2){
+            }else if(numeroAleatorio > partidas[indicePartida].apuesta2){
 
             }else{
               //empate
             }
         }else{
-            if (partidas[j].jugador1 === numeroJugador){
-                partidas[j].apuesta1=numeroAleatorio;
+            if (partidas[indicePartida].jugador1 === numeroJugador){
+                partidas[indicePartida].apuesta1 = numeroAleatorio;
 
-            }else if (partidas[j].jugador2 === numeroJugador) {
-                partidas[j].apuesta2=numeroAleatorio;
+            }else if (partidas[indicePartida].jugador2 === numeroJugador) {
+                partidas[indicePartida].apuesta2 = numeroAleatorio;
 
             }
           //guardo mi valor donde corresponde
@@ -73,7 +76,7 @@ io.on('connection', function(socket){
     //si existe comparo con el valor guardado y determino quien gana
   });
   socket.on('enviarServer', function(msg){
-  	console.log('recibiendo servidor: '+msg);
+  	//console.log('recibiendo servidor: '+msg);
     io.emit('enviarCliente', {data:msg});
   });
     
@@ -93,19 +96,23 @@ var emparejarJugadores=function(){
       }else{
         //posible llamada recursiva
       }
-      if(newPartida.jugador1!==0 && newPartida.jugador2!==0){
+      if(newPartida.jugador1!==0){
         partidas.push({
-          jugador1:newPartida.jugador1,
-          jugador2:newPartida.jugador2,
+          jugador1:newPartida.jugador1,          
           apuesta1:0,
-          apuesta2:0
-        });
+          });
         posicion1=buscarPosicion(newPartida.jugador1);
-        clientesOnline[posicion1].emit('jugar',{id:clientesOnline[posicion1].id,numero:socket.numero});
-        posicion2=buscarPosicion(newPartida.jugador2);
-        clientesOnline[posicion2].emit('jugar',{id:clientesOnline[posicion2].id,numero:socket.numero});
+        clientesOnline[posicion1].emit('jugar',{id:clientesOnline[posicion1].id,numero:clientesOnline[posicion1].numero});
         newPartida.jugador1 = 0;
-        newPartida.jugador2 = 0;
+      }
+      if (newPartida.jugador2!==0) {
+          partidas.push({
+            jugador2:newPartida.jugador2,
+            apuesta2:0
+          });
+          posicion2=buscarPosicion(newPartida.jugador2);
+          clientesOnline[posicion2].emit('jugar',{id:clientesOnline[posicion2].id,numero:clientesOnline[posicion2].numero});
+          newPartida.jugador2 = 0;
       }
   }
 };
@@ -116,7 +123,7 @@ var buscarJugadorYCambiarStado=function(){
     var encontrado = 0;
     while(band===false && prioridad<=3){
        for (var i = 0; band==false; i++) {
-            if (clientesOnline[i].prioridad===prioridad&&clientesOnline[i].estado=PLAYERSTATE[0]) {
+            if (clientesOnline[i].prioridad ===prioridad && clientesOnline[i].estado === PLAYERSTATE[0]) {
                 band = true;
                 clientesOnline[i].estado=PLAYERSTATE[1];
                 encontrado = clientesOnline[i].numero;
