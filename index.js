@@ -25,15 +25,17 @@ io.on('connection', function(socket){
   socket.emit('enviarCliente',{data:'Bienvenido cliente '+contClientes});
   
   socket.on('enviarServer',function(msg){
-    var indicePartida;
+    var indicePartida = 0;
     var numeroAleatorio = msg.numeroAleatorio;
     var numeroJugador = msg.numero;
 
-    console.log('Este es el numero aleatorio '+numeroAleatorio+'numero de jugador '+numeroJugador);
-    for (var k = ; k < partidas.length; k++) {
+    console.log('Este es el numero aleatorio '+numeroAleatorio+' numero de jugador '+numeroJugador);
+    for (var k = 0; k < partidas.length; k++) {
         console.log(partidas[k]);
     }
     
+    console.log('partidas.length: '+partidas.length);
+
     for (var j = 0; j < partidas.length; j++) {
         if (partidas[j].jugador1 === numeroJugador){
                 indicePartida=j;
@@ -42,7 +44,9 @@ io.on('connection', function(socket){
             }
     }
 
-    if (partidas[indicePartida].apuesta1 !== 0) {
+    console.log('indicePartida '+indicePartida);
+
+    if (partidas[indicePartida].apuesta1 !==undefined && partidas[indicePartida].apuesta1 !== 0) {
             //comparo
             if (partidas[indicePartida].apuesta1 > numeroAleatorio) {
                 
@@ -51,7 +55,7 @@ io.on('connection', function(socket){
             }else{
               //empate
             }
-          }else if(partidas[indicePartida].apuesta2 !== 0){
+          }else if(partidas[indicePartida].apuesta2 !== undefined && partidas[indicePartida].apuesta2 !== 0){
           //comparo
           if (partidas[indicePartida].apuesta2 > numeroAleatorio) {
 
@@ -70,6 +74,10 @@ io.on('connection', function(socket){
             }
           //guardo mi valor donde corresponde
         }   
+        console.log('Partidas activas');
+    for (var k = 0; k < partidas.length; k++) {
+        console.log(JSON.stringify(partidas[k]));
+    }
     //recorrer el arreglo de partidas para buscar en que partida estoy
     //verifico si ya existe en la partida el valor 1 o el valor 2
     //sino existe ninguno, guardo el valor que llego donde corresponda
@@ -87,32 +95,38 @@ http.listen(3000, function(){
 });
 
 var emparejarJugadores=function(){
-  var newPlayer = buscarJugadorYCambiarStado();
+  var newPlayer = 0;
+  newPlayer = buscarJugadorYCambiarStado();
+  console.log('ENCONTRO: '+JSON.stringify(newPlayer));
   if (newPlayer!==0) {
       if(newPartida.jugador1===0){
+        console.log('newPartida.jugador1===0 ? '+(newPartida.jugador1===0));
         newPartida.jugador1=newPlayer;
       }else if(newPartida.jugador2===0){
+        console.log('newPartida.jugador2===0 ? '+(newPartida.jugador2===0));
         newPartida.jugador2=newPlayer;
       }else{
         //posible llamada recursiva
       }
       if(newPartida.jugador1!==0){
-        partidas.push({
-          jugador1:newPartida.jugador1,          
-          apuesta1:0,
-          });
-        posicion1=buscarPosicion(newPartida.jugador1);
-        clientesOnline[posicion1].emit('jugar',{id:clientesOnline[posicion1].id,numero:clientesOnline[posicion1].numero});
-        newPartida.jugador1 = 0;
+        newPartida.apuesta1 = 0;
       }
       if (newPartida.jugador2!==0) {
-          partidas.push({
-            jugador2:newPartida.jugador2,
-            apuesta2:0
-          });
-          posicion2=buscarPosicion(newPartida.jugador2);
-          clientesOnline[posicion2].emit('jugar',{id:clientesOnline[posicion2].id,numero:clientesOnline[posicion2].numero});
-          newPartida.jugador2 = 0;
+          newPartida.apuesta2 = 0;
+      }
+      if(newPartida.jugador1!==0 && newPartida.jugador2!==0){
+        partidas.push({
+          jugador1:newPartida.jugador1,
+          jugador2:newPartida.jugador2,
+          apuesta1:newPartida.apuesta1,
+          apuesta2:newPartida.apuesta2
+        });
+        posicion1=buscarPosicion(newPartida.jugador1);
+        clientesOnline[posicion1].emit('jugar',{id:clientesOnline[posicion1].id,numero:clientesOnline[posicion1].numero});
+        posicion2=buscarPosicion(newPartida.jugador2);
+        clientesOnline[posicion2].emit('jugar',{id:clientesOnline[posicion2].id,numero:clientesOnline[posicion2].numero});
+        newPartida.jugador1 = 0;
+        newPartida.jugador2 = 0;
       }
   }
 };
