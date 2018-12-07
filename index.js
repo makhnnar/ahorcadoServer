@@ -25,18 +25,15 @@ io.on('connection', function(socket){
   socket.emit('enviarCliente',{data:'Bienvenido cliente '+contClientes});
   
   socket.on('enviarServer',function(msg){
-    var indicePartida = 0;
-    var numeroAleatorio = msg.numeroAleatorio;
-    var numeroJugador = msg.numero;
+    let indicePartida = 0;
+    let numeroAleatorio = msg.numeroAleatorio;
+    let numeroJugador = msg.numero;
 
-    console.log('Este es el numero aleatorio '+numeroAleatorio+' numero de jugador '+numeroJugador);
-    for (var k = 0; k < partidas.length; k++) {
+    for (let k = 0; k < partidas.length; k++) {
         console.log(partidas[k]);
     }
-    
-    console.log('partidas.length: '+partidas.length);
 
-    for (var j = 0; j < partidas.length; j++) {
+    for (let j = 0; j < partidas.length; j++) {
         if (partidas[j].jugador1 === numeroJugador){
                 indicePartida=j;
             }else if (partidas[j].jugador2 === numeroJugador) {
@@ -44,40 +41,28 @@ io.on('connection', function(socket){
             }
     }
 
-    console.log('indicePartida '+indicePartida);
-
     if (partidas[indicePartida].apuesta1 !== undefined && partidas[indicePartida].apuesta1 !== 0) {
             //comparo
             if (partidas[indicePartida].apuesta1 > numeroAleatorio) {
                  var pos1=buscarPosicion(partidas[indicePartida].jugador1,clientesOnline);
-                 console.log('Jugador 1 gana en la posicion: '+pos1)
                  clientesOnline[pos1].prioridad=2;
                  clientesOnline[pos1].estado=PLAYERSTATE[0];
-                 console.log('Estado jugador 1 '+clientesOnline[pos1].estado)
-                 console.log('prioridad jugador 1 '+clientesOnline[pos1].prioridad)
                  var pos2=buscarPosicion(partidas[indicePartida].jugador2,clientesOnline);
-                 console.log('jugador 2 pierde en la posicion '+pos2)
                  clientesOnline[pos2].prioridad=3;
                  clientesOnline[pos2].estado=PLAYERSTATE[0];
-                 console.log('Estado jugador 2 '+clientesOnline[pos2].estado)
-                 console.log('prioridad jugador 2 '+clientesOnline[pos2].prioridad)
                  emparejarJugadores(clientesOnline);
-                 emparejarJugadores(clientesOnline);                            
+                 emparejarJugadores(clientesOnline);
+                 partidas.splice(indicePartida,1);                       
             }else if(numeroAleatorio > partidas[indicePartida].apuesta1){
                 var pos2=buscarPosicion(partidas[indicePartida].jugador2,clientesOnline);
-                console.log('Jugador 2 gana en la posicion: '+pos2)
                 clientesOnline[pos2].prioridad=2;
                 clientesOnline[pos2].estado=PLAYERSTATE[0];
-                console.log('Estado jugador 2 '+clientesOnline[pos2].estado)
-                console.log('prioridad jugador 2 '+clientesOnline[pos2].prioridad)
                 var pos1=buscarPosicion(partidas[indicePartida].jugador1,clientesOnline);
-                console.log('jugador 1 pierde en la posicion '+pos1)
                 clientesOnline[pos1].prioridad=3;
                 clientesOnline[pos1].estado=PLAYERSTATE[0];
-                console.log('Estado jugador 1 '+clientesOnline[pos1].estado)
-                console.log('prioridad jugador 1 '+clientesOnline[pos1].prioridad)
                 emparejarJugadores(clientesOnline);
-                emparejarJugadores(clientesOnline); 
+                emparejarJugadores(clientesOnline);
+                partidas.splice(indicePartida,1);
             }else{
                 posicion1=buscarPosicion(partidas[indicePartida].jugador1,clientesOnline);
                 clientesOnline[posicion1].emit('jugar',{id:clientesOnline[posicion1].id,numero:clientesOnline[posicion1].numero});
@@ -89,35 +74,24 @@ io.on('connection', function(socket){
           //comparo
             if (partidas[indicePartida].apuesta2 > numeroAleatorio) {
                 var pos2=buscarPosicion(partidas[indicePartida].jugador2,clientesOnline);
-                console.log('Jugador 2 gana en la posicion: '+pos2)
                 clientesOnline[pos2].prioridad=2;
                 clientesOnline[pos2].estado=PLAYERSTATE[0];
-                console.log('Estado jugador 2 '+clientesOnline[pos2].estado)
-                console.log('prioridad jugador 2 '+clientesOnline[pos2].prioridad)
                 var pos1=buscarPosicion(partidas[indicePartida].jugador1,clientesOnline);
-                console.log('jugador 1 pierde en la posicion '+pos1)
                 clientesOnline[pos1].prioridad=3;
                 clientesOnline[pos1].estado=PLAYERSTATE[0];
-                console.log('Estado jugador 1 '+clientesOnline[pos1].estado)
-                console.log('prioridad jugador 1 '+clientesOnline[pos1].prioridad)
                 emparejarJugadores(clientesOnline);
                 emparejarJugadores(clientesOnline);
-               
+                partidas.splice(indicePartida,1);
             }else if(numeroAleatorio > partidas[indicePartida].apuesta2){
                 var pos1=buscarPosicion(partidas[indicePartida].jugador1,clientesOnline);
-                console.log('Jugador 1 gana su posicion es: '+pos1)
                 clientesOnline[pos1].prioridad=2;
                 clientesOnline[pos1].estado=PLAYERSTATE[0];
-                console.log('Estado jugador 1 '+clientesOnline[pos1].estado)
-                console.log('prioridad jugador 1 '+clientesOnline[pos1].prioridad)
                 var pos2=buscarPosicion(partidas[indicePartida].jugador2,clientesOnline);
-                console.log('jugador 2 pierde en la posicion '+pos2)
                 clientesOnline[pos2].prioridad=3;
                 clientesOnline[pos2].estado=PLAYERSTATE[0];
-                console.log('Estado jugador 2 '+clientesOnline[pos2].estado)
-                console.log('prioridad jugador 2 '+clientesOnline[pos2].prioridad)
                 emparejarJugadores(clientesOnline);
-                emparejarJugadores(clientesOnline);    
+                emparejarJugadores(clientesOnline);
+                partidas.splice(indicePartida,1);
             }else{
                 posicion2=buscarPosicion(partidas[indicePartida].jugador2,clientesOnline);
                 clientesOnline[posicion2].emit('jugar',{id:clientesOnline[posicion2].id,numero:clientesOnline[posicion2].numero});
@@ -133,16 +107,11 @@ io.on('connection', function(socket){
                   partidas[indicePartida].apuesta2 = numeroAleatorio;
               }
           //guardo mi valor donde corresponde
-        }   
-        console.log('Partidas activas');
-      for (var k = 0; k < partidas.length; k++) {
-          console.log(JSON.stringify(partidas[k]));
-      }
+        } 
     
   });
 
   socket.on('enviarServer', function(msg){
-  	//console.log('recibiendo servidor: '+msg);
     io.emit('enviarCliente', {data:msg});
   });
     
@@ -153,15 +122,12 @@ http.listen(3000, function(){
 });
 
 var emparejarJugadores=function(clientes){
-  var newPlayer = 0;
+  let newPlayer = 0;
   newPlayer = buscarJugadorYCambiarStado(clientes);
-  console.log('ENCONTRO: '+JSON.stringify(newPlayer));
   if (newPlayer!==0) {
       if(newPartida.jugador1===0){
-        console.log('newPartida.jugador1===0 ? '+(newPartida.jugador1===0));
         newPartida.jugador1=newPlayer;
       }else if(newPartida.jugador2===0){
-        console.log('newPartida.jugador2===0 ? '+(newPartida.jugador2===0));
         newPartida.jugador2=newPlayer;
       }else{
         //posible llamada recursiva si no empareja
@@ -192,17 +158,18 @@ var emparejarJugadores=function(clientes){
 };
 
 var buscarJugadorYCambiarStado=function(clientes){
-    var band = false;
-    var prioridad = 1;
-    var encontrado = 0;
+    let band = false;
+    let prioridad = 1;
+    let encontrado = 0;
     while(band===false && prioridad<=3){
-       for (var i = 0; band==false; i++) {
+        for (let i = 0; (band==false && i<clientes.length); i++) {
+            console.log('i: '+i);
             if (clientes[i].prioridad === prioridad && clientes[i].estado === PLAYERSTATE[0]) {
                 band = true;
                 clientes[i].estado=PLAYERSTATE[1];
                 encontrado = clientes[i].numero;
             }    
-       }
+        }
         //incrementar la prioridad sino encontre un elemento para devolver
         if (band===false) {
             prioridad++;
@@ -211,8 +178,8 @@ var buscarJugadorYCambiarStado=function(clientes){
     return encontrado;
 };
 var buscarPosicion=function(numero,clientes){
-    var posicion1;
-      for (var x = 0; x < clientes.length; x++) {
+    let posicion1;
+      for (let x = 0; x < clientes.length; x++) {
           if ( clientes[x].numero===numero) {
               posicion1=x;     
           } 
