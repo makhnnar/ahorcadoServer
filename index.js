@@ -29,10 +29,6 @@ io.on('connection', function(socket){
     let numeroAleatorio = msg.numeroAleatorio;
     let numeroJugador = msg.numero;
 
-    for (let k = 0; k < partidas.length; k++) {
-        console.log(partidas[k]);
-    }
-
     for (let j = 0; j < partidas.length; j++) {
         if (partidas[j].jugador1 === numeroJugador){
                 indicePartida=j;
@@ -40,7 +36,8 @@ io.on('connection', function(socket){
                 indicePartida=j;
             }
     }
-
+    console.clear();
+    
     if (partidas[indicePartida].apuesta1 !== undefined && partidas[indicePartida].apuesta1 !== 0) {
             //comparo
             if (partidas[indicePartida].apuesta1 > numeroAleatorio) {
@@ -102,13 +99,16 @@ io.on('connection', function(socket){
          }else{
               if (partidas[indicePartida].jugador1 === numeroJugador){
                   partidas[indicePartida].apuesta1 = numeroAleatorio;
-
               }else if (partidas[indicePartida].jugador2 === numeroJugador) {
                   partidas[indicePartida].apuesta2 = numeroAleatorio;
               }
           //guardo mi valor donde corresponde
         } 
-    
+        console.log('---------------------------------------------------');
+        for (let k = 0; k < partidas.length; k++) {
+            console.log('partida '+(k+1)+': '+JSON.stringify(partidas[k]));
+        }
+        console.log('---------------------------------------------------');
   });
 
   socket.on('enviarServer', function(msg){
@@ -163,7 +163,6 @@ var buscarJugadorYCambiarStado=function(clientes){
     let encontrado = 0;
     while(band===false && prioridad<=3){
         for (let i = 0; (band==false && i<clientes.length); i++) {
-            console.log('i: '+i);
             if (clientes[i].prioridad === prioridad && clientes[i].estado === PLAYERSTATE[0]) {
                 band = true;
                 clientes[i].estado=PLAYERSTATE[1];
@@ -175,6 +174,7 @@ var buscarJugadorYCambiarStado=function(clientes){
             prioridad++;
         }
     }
+    console.log('Encontrado con prioridad: '+prioridad);
     return encontrado;
 };
 var buscarPosicion=function(numero,clientes){
