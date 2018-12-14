@@ -1,48 +1,47 @@
 <html>
   <head>
-    <title>Servidor Ruleta</title>
+    <title>Ahorcado</title>
   </head>
   <body>
-    <div id="mensajes">
-      <ul id="messages"></ul>
-    </div>
+    <style>
+      input{
+        width:400px
+        margin:0 0 25px;
+        overflow:hidden;
+        padding:20px;
+        background-color:white;
+        border:1px solid black;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+      }
+      button{
+        width: 100px;
+        height: 60px;
+        background: #52A188 ;
+        border-radius: 6px;   
+      }
+      p{
+        font-size: 150%;
+      }      
+   </style>
 
     <div id="entradas">
-      <input id="m" autocomplete="off" />
-      <button onclick="enviar()">Send</button>
+      <input id="palabra" type="password" placeholder="Palabra a adivinar" name="">
+      <input id="pista" type="" placeholder="Pista" name="">
+      <button id="button" onclick="Procesardatos()">Procesar Datos</button>
+    </div>
+    <div>
+      <input id="letra" type="" placeholder="Letra" name="">
+       <button id="button1" onclick="ingresarletra()">Ingresar Letra</button>
     </div>
 
+    <div id="mensajes">
+      <ul id="messages"></ul>
+      <p id="datosJuego"></p>
+    </div>
+
+    <script type="text/javascript" src="./cliente.js"></script>
+    
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-      var socket = {};
-      (function(){
-        socket = io();
-        socket.on('enviarCliente', function(msg){
-            console.log('RECIBIENDO: '+JSON.stringify(msg));
-            var node = document.createElement("LI");
-            var textnode = document.createTextNode(msg.data);
-            node.appendChild(textnode);
-            document.getElementById('messages').appendChild(node);
-        });
-      })();
-      
-      socket.on('jugar',function(msg){
-           console.log('RECIBIENDO: '+JSON.stringify(msg));
-
-           setTimeout(function(){
-              var numeroAleatorio=Math.trunc(Math.random()*50+1);
-              console.log('enviando: '+numeroAleatorio);
-              socket.emit('enviarServer',{numero:msg.numero,numeroAleatorio:numeroAleatorio});
-           },Math.trunc(Math.random()*9+1)*1000);
-
-      });
-      var enviar = function(){
-        var textoMsg = document.getElementById('m').value;
-        console.log('enviando: '+textoMsg);
-        socket.emit('enviarServer',textoMsg);
-        document.getElementById('m').value = '';
-      }
-
-    </script>
   </body>
 </html>
