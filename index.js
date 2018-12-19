@@ -2,6 +2,10 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var IOSManager = require('./managers/IOSocketManager');
+
+const _iosm = IOSManager();
+
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
@@ -131,6 +135,16 @@ io.on('connection', function(socket){
     });
 
 });
+
+/**
+ * numero_cuarto empezara en 0
+ * Crear una nueva funcion de emparejamiento
+ * Va a crear un cuarto nuevo cada 2 jugadores(con el numero_cuarto), 
+ * empezando por el primero que llegue
+ * Ingresas el primer jugador al cuarto, guardas el id, hasta que llegue el segundo jugador,
+ * lo ingresas al mismo cuarto, y actualizas el id de cuarto con un numero_cuarto++
+ * cada vez que ingresas un jugador al cuarto, le das el numero_cuarto al que pertenecen 
+ */
 
 var emparejarJugadores = function(clientes){
   let newPlayer = 0;
