@@ -16,162 +16,123 @@ var newPartida = {jugador1:0,jugador2:0,apuesta1:0,apuesta2:0};
 
 io.on('connection', function(socket){
   
-  contClientes++;
-  socket.prioridad = 1;
-  socket.numero = contClientes;
-  socket.estado = PLAYERSTATE[0];
-  clientesOnline.push(socket);
+    contClientes++;
+    socket.prioridad = 1;
+    socket.numero = contClientes;
+    socket.estado = PLAYERSTATE[0];
+    clientesOnline.push(socket);
 
-  emparejarJugadores(clientesOnline);
-    
-  socket.emit('enviarCliente',{data:'Bienvenido cliente '+contClientes});
+    emparejarJugadores(clientesOnline);
+        
+    socket.emit('enviarCliente',{data:'Bienvenido cliente '+contClientes});
 
-  socket.on('enviarServer',function(msg){
-    let indicePartida = 0;
-    let numeroAleatorio = msg.numeroAleatorio;
-    let numeroJugador = msg.numero;
+    socket.on('enviarServer',function(msg){
+        let indicePartida = 0;
+        let numeroAleatorio = msg.numeroAleatorio;
+        let numeroJugador = msg.numero;
 
-    for (let j = 0; j < partidas.length; j++) {
-        if (partidas[j].jugador1 === numeroJugador){
-                indicePartida=j;
-            }else if (partidas[j].jugador2 === numeroJugador) {
-                indicePartida=j;
-            }
-    }
-
-    console.clear();
-    
-    if (partidas[indicePartida].apuesta1 !== undefined && partidas[indicePartida].apuesta1 !== 0) {
-            //comparo
-            if (partidas[indicePartida].apuesta1 > numeroAleatorio) {
-                 var pos1 = buscarPosicion(partidas[indicePartida].jugador1,clientesOnline);
-                 clientesOnline[pos1].prioridad = 2;
-                 clientesOnline[pos1].estado=PLAYERSTATE[0];
-                 var pos2 = buscarPosicion(partidas[indicePartida].jugador2,clientesOnline);
-                 clientesOnline[pos2].prioridad = 3;
-                 clientesOnline[pos2].estado = PLAYERSTATE[0];
-                 emparejarJugadores(clientesOnline);
-                 emparejarJugadores(clientesOnline);
-                 partidas.splice(indicePartida,1);                       
-            }else if(numeroAleatorio > partidas[indicePartida].apuesta1){
-                var pos2 = buscarPosicion(partidas[indicePartida].jugador2,clientesOnline);
-                clientesOnline[pos2].prioridad = 2;
-                clientesOnline[pos2].estado = PLAYERSTATE[0];
-                var pos1 = buscarPosicion(partidas[indicePartida].jugador1,clientesOnline);
-                clientesOnline[pos1].prioridad = 3;
-                clientesOnline[pos1].estado = PLAYERSTATE[0];
-                emparejarJugadores(clientesOnline);
-                emparejarJugadores(clientesOnline);
-                partidas.splice(indicePartida,1);
-            }else{
-                posicion1 = buscarPosicion(partidas[indicePartida].jugador1,clientesOnline);
-                clientesOnline[posicion1].emit('iniciarJuego',{id:clientesOnline[posicion1].id,numero:clientesOnline[posicion1].numero});
-                posicion2 = buscarPosicion(partidas[indicePartida].jugador2,clientesOnline);
-                clientesOnline[posicion2].emit('iniciarJuego',{id:clientesOnline[posicion2].id,numero:clientesOnline[posicion2].numero});
-                //empate
-            }
-          }else if(partidas[indicePartida].apuesta2 !== undefined && partidas[indicePartida].apuesta2 !== 0){
-          //comparo
-            if (partidas[indicePartida].apuesta2 > numeroAleatorio) {
-                var pos2 = buscarPosicion(partidas[indicePartida].jugador2,clientesOnline);
-                clientesOnline[pos2].prioridad = 2;
-                clientesOnline[pos2].estado = PLAYERSTATE[0];
-                var pos1 = buscarPosicion(partidas[indicePartida].jugador1,clientesOnline);
-                clientesOnline[pos1].prioridad = 3;
-                clientesOnline[pos1].estado = PLAYERSTATE[0];
-                emparejarJugadores(clientesOnline);
-                emparejarJugadores(clientesOnline);
-                partidas.splice(indicePartida,1);
-            }else if(numeroAleatorio > partidas[indicePartida].apuesta2){
-                var pos1 = buscarPosicion(partidas[indicePartida].jugador1,clientesOnline);
-                clientesOnline[pos1].prioridad = 2;
-                clientesOnline[pos1].estado = PLAYERSTATE[0];
-                var pos2 = buscarPosicion(partidas[indicePartida].jugador2,clientesOnline);
-                clientesOnline[pos2].prioridad = 3;
-                clientesOnline[pos2].estado = PLAYERSTATE[0];
-                emparejarJugadores(clientesOnline);
-                emparejarJugadores(clientesOnline);
-                partidas.splice(indicePartida,1);
-            }else{
-                posicion2 = buscarPosicion(partidas[indicePartida].jugador2,clientesOnline);
-                clientesOnline[posicion2].emit('iniciarJuego',{id:clientesOnline[posicion2].id,numero:clientesOnline[posicion2].numero});
-                posicion1 = buscarPosicion(partidas[indicePartida].jugador1,clientesOnline);
-                clientesOnline[posicion1].emit('iniciarJuego',{id:clientesOnline[posicion1].id,numero:clientesOnline[posicion1].numero});
-              //empate
-            }
-         }else{
-              if (partidas[indicePartida].jugador1 === numeroJugador){
-                  partidas[indicePartida].apuesta1 = numeroAleatorio;
-              }else if (partidas[indicePartida].jugador2 === numeroJugador) {
-                  partidas[indicePartida].apuesta2 = numeroAleatorio;
-              }
-          //guardo mi valor donde corresponde
-        } 
-        console.log('---------------------------------------------------');
-        for (let k = 0; k < partidas.length; k++) {
-            console.log('partida '+(k+1)+': '+JSON.stringify(partidas[k]));
+        for (let j = 0; j < partidas.length; j++) {
+            if (partidas[j].jugador1 === numeroJugador){
+                    indicePartida = j;
+                }else if (partidas[j].jugador2 === numeroJugador) {
+                    indicePartida = j;
+                }
         }
-        console.log('---------------------------------------------------');
-  });
+
+        console.clear();
+        
+        if (
+            partidas[indicePartida].apuesta1 !== undefined && 
+            partidas[indicePartida].apuesta1 !== 0
+        ) {
+                //comparo
+                whoWins(
+                    partidas[indicePartida].apuesta1,
+                    numeroAleatorio,
+                    indicePartida,
+                    clientesOnline
+                );
+            }else if(
+                partidas[indicePartida].apuesta2 !== undefined && 
+                partidas[indicePartida].apuesta2 !== 0
+            ){
+            //comparo
+                whoWins(
+                    numeroAleatorio,
+                    partidas[indicePartida].apuesta2,
+                    indicePartida,
+                    clientesOnline
+                );
+            }else{
+                if (partidas[indicePartida].jugador1 === numeroJugador){
+                    partidas[indicePartida].apuesta1 = numeroAleatorio;
+                }else if (partidas[indicePartida].jugador2 === numeroJugador) {
+                    partidas[indicePartida].apuesta2 = numeroAleatorio;
+                }
+            //guardo mi valor donde corresponde
+            } 
+            console.log('---------------------------------------------------');
+            for (let k = 0; k < partidas.length; k++) {
+                console.log('partida '+(k+1)+': '+JSON.stringify(partidas[k]));
+            }
+            console.log('---------------------------------------------------');
+    });
   
-  socket.on('jugar',function(msg){
-      let palabra = msg.palabra;
-      let pista = msg.pista;
-      let numero = msg.numero;
-      let pareja = msg.pareja;
-      
-      if (palabras.length != 0) {
-          for(let y = 0; y < palabras.length;y++){
-              if (numero === palabras[y].pareja) {
-                  let posicion1 = buscarPosicion(palabra[y].numero,clientesOnline);                  
-                  clientes[posicion1].emit('recibirPalabra',{palabra:palabra,pista:pista});
-                  let posicion2 = buscarPosicion(palabra[y].pareja,clientesOnline);
-                  clientes[posicion2].emit('recibirPalabra',{palabra:palabra[y].palabra,pista:palabra[y].pista});
-              }else{
-                  palabras.push({
-                  palabra:palabra,
-                  pista:pista,
-                  numero:numero,
-                  pareja:pareja
-                  });        
-              }
-          }
-      }else{
-        palabras.push({
-          palabra:palabra,
-          pista:pista,
-          numero:numero,
-          pareja:pareja
-        });
-        console.log(JSON.stringify(palabras));
-      }
-  });
+    socket.on('jugar',function(msg){
+        let palabra = msg.palabra;
+        let pista = msg.pista;
+        let numero = msg.numero;
+        let pareja = msg.pareja;
+        
+        if (palabras.length != 0) {
+            for(let y = 0; y < palabras.length;y++){
+                if (numero === palabras[y].pareja) {
+                    let posicion1 = buscarPosicion(palabra[y].numero,clientesOnline);                  
+                    clientes[posicion1].emit('recibirPalabra',{palabra:palabra,pista:pista});
+                    let posicion2 = buscarPosicion(palabra[y].pareja,clientesOnline);
+                    clientes[posicion2].emit('recibirPalabra',{palabra:palabra[y].palabra,pista:palabra[y].pista});
+                }else{
+                    palabras.push({
+                        palabra:palabra,
+                        pista:pista,
+                        numero:numero,
+                        pareja:pareja
+                    });        
+                }
+            }
+        }else{
+            palabras.push({
+                palabra:palabra,
+                pista:pista,
+                numero:numero,
+                pareja:pareja
+            });
+            console.log(JSON.stringify(palabras));
+        }
+    });
   
-  socket.on('enviarLetra',function(msg){
-    var letra = msg.letra;
-    var mostrar = msg.mostrar;
-    letras.push(letra);
+    socket.on('enviarLetra',function(msg){
+        var letra = msg.letra;
+        var mostrar = msg.mostrar;
+        letras.push(letra);
+    });
+
+    socket.on('resultado',function(msg){
+        palabra = msg.palabra;
+        var cadena='';
+
+        for (var q = 0; q < letras.length; q++) {
+            cadena = cadena + letras[q];
+        }
+
+        if (cadena===palabra) {
+            //Gano
+        }
+    });
+
 });
 
-  socket.on('resultado',function(msg){
-      palabra = msg.palabra;
-      var cadena='';
-
-      for (var q = 0; q < letras.length; q++) {
-          cadena = cadena + letras[q];
-      }
-
-      if (cadena===palabra) {
-          //Gano
-      }
-
-});
-
-http.listen(3000, function(){
-  console.log('listening on *:3000');
-});
-
-var emparejarJugadores=function(clientes){
+var emparejarJugadores = function(clientes){
   let newPlayer = 0;
   newPlayer = buscarJugadorYCambiarStado(clientes);
   if (newPlayer!==0) {
@@ -198,10 +159,18 @@ var emparejarJugadores=function(clientes){
 
         posicion1 = buscarPosicion(newPartida.jugador1,clientesOnline);
         clientes[posicion1].estado = PLAYERSTATE[2];
-        clientes[posicion1].emit('iniciarJuego',{id:clientes[posicion1].id,numero:clientes[posicion1].numero,pareja:newPartida.jugador2});
+        clientes[posicion1].emit('iniciarJuego',{
+            id:clientes[posicion1].id,
+            numero:clientes[posicion1].numero,
+            pareja:newPartida.jugador2
+        });
         posicion2 = buscarPosicion(newPartida.jugador2,clientesOnline);
         clientes[posicion2].estado = PLAYERSTATE[2];
-        clientes[posicion2].emit('iniciarJuego',{id:clientes[posicion2].id,numero:clientes[posicion2].numero,pareja:newPartida.jugador1});
+        clientes[posicion2].emit('iniciarJuego',{
+            id:clientes[posicion2].id,
+            numero:clientes[posicion2].numero,
+            pareja:newPartida.jugador1
+        });
         newPartida.jugador1 = 0;
         newPartida.jugador2 = 0;
      }
@@ -214,7 +183,10 @@ var buscarJugadorYCambiarStado = function(clientes){
     let encontrado = 0;
     while(band === false && prioridad<=3){
         for (let i = 0; (band == false && i<clientes.length); i++) {
-            if (clientes[i].prioridad === prioridad && clientes[i].estado === PLAYERSTATE[0]) {
+            if (
+                clientes[i].prioridad === prioridad &&
+                clientes[i].estado === PLAYERSTATE[0]
+            ) {
                 band = true;
                 clientes[i].estado = PLAYERSTATE[1];
                 encontrado = clientes[i].numero;
@@ -229,12 +201,52 @@ var buscarJugadorYCambiarStado = function(clientes){
     return encontrado;
 };
 
-var buscarPosicion=function(numero,clientes){
+var buscarPosicion = function(numero, clientes){
     let posicion1;
-      for (let x = 0; x < clientes.length; x++) {
-          if ( clientes[x].numero===numero) {
-              posicion1=x;     
-          } 
-      }
+    for (let x = 0; x < clientes.length; x++) {
+        if ( clientes[x].numero === numero) {
+            posicion1=x;     
+        } 
+    }
     return posicion1;
 };
+
+var whoWins = function (valApuestaP1, valApuestaP2, posPartida, clientes) {
+    if (valApuestaP1 > valApuestaP2) {
+      let pos1 = buscarPosicion(partidas[posPartida].jugador1, clientes);
+      clientes[pos1].prioridad = 2;
+      clientes[pos1].estado = PLAYERSTATE[0];
+      let pos2 = buscarPosicion(partidas[posPartida].jugador2, clientes);
+      clientes[pos2].prioridad = 3;
+      clientes[pos2].estado = PLAYERSTATE[0];
+      emparejarJugadores(clientes);
+      emparejarJugadores(clientes);
+      partidas.splice(posPartida, 1);                       
+    } else if (valApuestaP2 > valApuestaP1) {
+      let pos2 = buscarPosicion(partidas[posPartida].jugador2, clientes);
+      clientes[pos2].prioridad = 2;
+      clientes[pos2].estado = PLAYERSTATE[0];
+      let pos1 = buscarPosicion(partidas[posPartida].jugador1, clientes);
+      clientes[pos1].prioridad = 3;
+      clientes[pos1].estado = PLAYERSTATE[0];
+      emparejarJugadores(clientes);
+      emparejarJugadores(clientes);
+      partidas.splice(posPartida, 1);
+    } else {
+      let pos1 = buscarPosicion(partidas[posPartida].jugador1, clientes);
+      clientes[pos1].emit('jugar', {
+        id: clientesOnline[pos1].id,
+        numero: clientesOnline[pos1].numero
+      });
+      let pos2 = buscarPosicion(partidas[posPartida].jugador2, clientes);
+      clientes[pos2].emit('jugar', {
+        id: clientesOnline[pos2].id,
+        numero: clientesOnline[pos2].numero
+      });
+      // empate
+    }
+  };
+
+http.listen(3000, function(){
+    console.log('listening on *:3000');
+});
