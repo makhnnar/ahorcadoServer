@@ -18,6 +18,9 @@ var clientesOnline = [];
 var partidas = [];
 var newPartida = {jugador1:0,jugador2:0,apuesta1:0,apuesta2:0};
 
+let numero_cuarto = 0;
+let miembros_partida = 0;
+
 io.on('connection', function(socket){
   
     contClientes++;
@@ -146,10 +149,24 @@ io.on('connection', function(socket){
  * cada vez que ingresas un jugador al cuarto, le das el numero_cuarto al que pertenecen 
  */
 
-var emparejarJugadores = function(clientes){
+var emparejarJugadores = function(clientes,miembros,cuarto){
   let newPlayer = 0;
   newPlayer = buscarJugadorYCambiarStado(clientes);
-  if (newPlayer!==0) {
+  if(miembros<2){
+    miembros++;
+  }else{
+    miembros = 1;
+    cuarto++;
+  }
+  _iosm.joinRoom(newPlayer,cuarto);
+  newPlayer.emit('iniciarJuego',{
+    id:newPlayer.id,
+    numero:newPlayer.numero,
+    numCuarto:cuarto
+  });
+
+
+  /*if (newPlayer!==0) {
       if(newPartida.jugador1===0){
         newPartida.jugador1=newPlayer;
       }else if(newPartida.jugador2===0){
@@ -188,13 +205,13 @@ var emparejarJugadores = function(clientes){
         newPartida.jugador1 = 0;
         newPartida.jugador2 = 0;
      }
-  }
+  }*/
 };
 
 var buscarJugadorYCambiarStado = function(clientes){
     let band = false;
     let prioridad = 1;
-    let encontrado = 0;
+    let encontrado = null;
     while(band === false && prioridad<=3){
         for (let i = 0; (band == false && i<clientes.length); i++) {
             if (
@@ -203,7 +220,7 @@ var buscarJugadorYCambiarStado = function(clientes){
             ) {
                 band = true;
                 clientes[i].estado = PLAYERSTATE[1];
-                encontrado = clientes[i].numero;
+                encontrado = clientes[i];
             }    
         }
         //incrementar la prioridad sino encontre un elemento para devolver
