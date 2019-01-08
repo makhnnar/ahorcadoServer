@@ -7,9 +7,6 @@ var IOSManager = require('./managers/IOSocketManager');
 
 const _iosm = IOSManager();
 
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
-});
 
 app.use(express.static('public'));
 
