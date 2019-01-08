@@ -17,7 +17,7 @@ var palabras = [],
     partidas = [],
     newPartida = {jugador1:0,jugador2:0,apuesta1:0,apuesta2:0};
 
-let numero_cuarto = 0,
+var numero_cuarto = 0,
     miembros_partida = 0;
 
 io.on(
@@ -30,11 +30,7 @@ io.on(
     socket.estado = PLAYERSTATE[0];
     clientesOnline.push(socket);
 
-    emparejarJugadores(
-      clientesOnline,
-      miembros_partida,
-      numero_cuarto
-    );
+    emparejarJugadores(clientesOnline,io);
         
     socket.emit(
       'enviarCliente',
@@ -147,29 +143,37 @@ io.on(
  * cada vez que ingresas un jugador al cuarto, le das el numero_cuarto al que pertenecen 
  */
 
-var emparejarJugadores = function(clientes,miembros,cuarto){
+var emparejarJugadores = function(clientes,io){
   let newPlayer = 0;
   
   newPlayer = buscarJugadorYCambiarStado(clientes);
   
-  if(miembros < 2)
+  if(miembros_partida < 2)
   {
-    miembros++;
+    miembros_partida++;
   }
   else
   {
-    miembros = 1;
-    cuarto++;
+    miembros_partida = 1;
+    numero_cuarto++;
   }
   
-  _iosm.joinRoom(newPlayer,cuarto);
+  _iosm.joinRoom(newPlayer,numero_cuarto);
 
   newPlayer.emit('iniciarJuego',{
     id:newPlayer.id,
     numero:newPlayer.numero,
-    numCuarto:cuarto
+    numCuarto:numero_cuarto
   });
 
+  if(miembros_partida === 2){
+    _iosm.sendRoomMsg(
+      io,
+      numero_cuarto-1,
+      "jugarAhora",
+      ""
+    );
+  }  
   /*if (newPlayer!==0) {
       if(newPartida.jugador1===0){
         newPartida.jugador1=newPlayer;
