@@ -7,7 +7,6 @@ var IOSocketManager = function(){
 
 	// send a message to the socket room with the given id
 	this.sendRoomMsg = function(io,id_room,evento,msg){
-		var id_room = this.getValidRoom(id_room);
 		io.sockets.in(id_room).emit(evento,msg);
 	};
 
@@ -16,15 +15,14 @@ var IOSocketManager = function(){
 	};
 
 	this.joinRoom = function(socket,id_room) {
-		var id_room = this.getValidRoom(id_room); 
-		socket.join(id_room, () => {
+		socket.join(id_room, function(){
 			let rooms = Object.keys(socket.rooms);
 			console.log(rooms); // [ <socket.id>, 'room 237' ]
 		});	
 	};
 
 	this.leaveRoom = function(socket,id_room) {
-		socket.leave(id_room, () => {
+		socket.leave(id_room, function(){
 			let rooms = Object.keys(socket.rooms);
 			console.log(rooms); // [ <socket.id>, 'room 237' ]
 		});	
@@ -36,6 +34,3 @@ module.exports = function(){
 	var instancia = new IOSocketManager();
 	return instancia;
 };
-
-
-

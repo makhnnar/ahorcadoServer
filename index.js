@@ -1,4 +1,5 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
@@ -10,18 +11,21 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
-var letras = [];
-var palabras = [];
-var PLAYERSTATE = ["sin jugar","esperando","jugando"];
-var contClientes = 0;
-var clientesOnline = [];
-var partidas = [];
-var newPartida = {jugador1:0,jugador2:0,apuesta1:0,apuesta2:0};
+app.use(express.static('public'));
 
-let numero_cuarto = 0;
-let miembros_partida = 0;
+var palabras = [],
+    PLAYERSTATE = ["sin jugar","esperando","jugando"],
+    contClientes = 0,
+    clientesOnline = [],
+    partidas = [],
+    newPartida = {jugador1:0,jugador2:0,apuesta1:0,apuesta2:0};
 
-io.on('connection', function(socket){
+let numero_cuarto = 0,
+    miembros_partida = 0;
+
+io.on(
+  'connection',
+   function(socket){
   
     contClientes++;
     socket.prioridad = 1;
@@ -29,84 +33,101 @@ io.on('connection', function(socket){
     socket.estado = PLAYERSTATE[0];
     clientesOnline.push(socket);
 
-    emparejarJugadores(clientesOnline);
+    emparejarJugadores(
+      clientesOnline,
+      miembros_partida,
+      numero_cuarto
+    );
         
-    socket.emit('enviarCliente',{data:'Bienvenido cliente '+contClientes});
+    socket.emit(
+      'enviarCliente',
+      {
+        data:'Bienvenido cliente '+contClientes
+      }
+    );
 
-    socket.on('enviarServer',function(msg){
-        let indicePartida = 0;
-        let numeroAleatorio = msg.numeroAleatorio;
-        let numeroJugador = msg.numero;
+    socket.on(
+      'enviarServer',
+      function(msg){
+        let indicePartida = 0,
+        numeroAleatorio = msg.numeroAleatorio,
+        numeroJugador = msg.numero;
 
-        for (let j = 0; j < partidas.length; j++) {
-            if (partidas[j].jugador1 === numeroJugador){
-                    indicePartida = j;
-                }else if (partidas[j].jugador2 === numeroJugador) {
-                    indicePartida = j;
-                }
+        for (let j = 0; j < partidas.length; j++){
+          if (partidas[j].jugador1 === numeroJugador){
+            indicePartida = j;
+          }else if (partidas[j].jugador2 === numeroJugador){
+            indicePartida = j;
+          }
         }
 
         console.clear();
         
         if (
-            partidas[indicePartida].apuesta1 !== undefined && 
-            partidas[indicePartida].apuesta1 !== 0
-        ) {
-                //comparo
-                whoWins(
-                    partidas[indicePartida].apuesta1,
-                    numeroAleatorio,
-                    indicePartida,
-                    clientesOnline
-                );
-            }else if(
-                partidas[indicePartida].apuesta2 !== undefined && 
-                partidas[indicePartida].apuesta2 !== 0
-            ){
+          partidas[indicePartida].apuesta1 !== undefined && 
+          partidas[indicePartida].apuesta1 !== 0
+        ){
             //comparo
-                whoWins(
-                    numeroAleatorio,
-                    partidas[indicePartida].apuesta2,
-                    indicePartida,
-                    clientesOnline
-                );
-            }else{
-                if (partidas[indicePartida].jugador1 === numeroJugador){
-                    partidas[indicePartida].apuesta1 = numeroAleatorio;
-                }else if (partidas[indicePartida].jugador2 === numeroJugador) {
-                    partidas[indicePartida].apuesta2 = numeroAleatorio;
-                }
-            //guardo mi valor donde corresponde
-            } 
-            console.log('---------------------------------------------------');
-            for (let k = 0; k < partidas.length; k++) {
-                console.log('partida '+(k+1)+': '+JSON.stringify(partidas[k]));
-            }
-            console.log('---------------------------------------------------');
+            whoWins(
+                partidas[indicePartida].apuesta1,
+                numeroAleatorio,
+                indicePartida,
+                clientesOnline
+            );
+        }else if(
+          partidas[indicePartida].apuesta2 !== undefined && 
+          partidas[indicePartida].apuesta2 !== 0
+        ){
+            //comparo
+            whoWins(
+                numeroAleatorio,
+                partidas[indicePartida].apuesta2,
+                indicePartida,
+                clientesOnline
+            );
+        }else{
+          if (partidas[indicePartida].jugador1 === numeroJugador){
+            partidas[indicePartida].apuesta1 = numeroAleatorio;
+          }else if (partidas[indicePartida].jugador2 === numeroJugador){
+            partidas[indicePartida].apuesta2 = numeroAleatorio;
+          }
+          //guardo mi valor donde corresponde
+        } 
+        console.log('---------------------------------------------------');
+        for (let k = 0; k < partidas.length; k++) 
+        {
+          console.log('partida '+(k+1)+': '+JSON.stringify(partidas[k]));
+        }
+        console.log('---------------------------------------------------');
     });
   
-    socket.on('jugar',function(msg){
-        let palabra = msg.palabra;
-        let pista = msg.pista;
-        let numero = msg.numero;
-        let pareja = msg.pareja;
+    socket.on(
+      'jugar',
+      function(msg){
+        let palabra = msg.palabra,
+        pista = msg.pista,
+        numero = msg.numero,
+        pareja = msg.pareja;
         
-        if (palabras.length != 0) {
-            for(let y = 0; y < palabras.length;y++){
-                if (numero === palabras[y].pareja) {
-                    let posicion1 = buscarPosicion(palabra[y].numero,clientesOnline);                  
-                    clientes[posicion1].emit('recibirPalabra',{palabra:palabra,pista:pista});
-                    let posicion2 = buscarPosicion(palabra[y].pareja,clientesOnline);
-                    clientes[posicion2].emit('recibirPalabra',{palabra:palabra[y].palabra,pista:palabra[y].pista});
-                }else{
-                    palabras.push({
-                        palabra:palabra,
-                        pista:pista,
-                        numero:numero,
-                        pareja:pareja
-                    });        
-                }
+        if (palabras.length != 0) 
+        {
+          for(let y = 0; y < palabras.length;y++)
+          {
+            if (numero === palabras[y].pareja) 
+            {
+              let posicion1 = buscarPosicion(palabra[y].numero,clientesOnline);                  
+              clientes[posicion1].emit('recibirPalabra',{palabra:palabra,pista:pista});
+              let posicion2 = buscarPosicion(palabra[y].pareja,clientesOnline);
+              clientes[posicion2].emit('recibirPalabra',{palabra:palabra[y].palabra,pista:palabra[y].pista});
+            }else {
+                palabras.push({
+                  palabra:palabra,
+                  pista:pista,
+                  numero:numero,
+                  pareja:pareja
+                });        
             }
+          }
         }else{
             palabras.push({
                 palabra:palabra,
@@ -117,28 +138,8 @@ io.on('connection', function(socket){
             console.log(JSON.stringify(palabras));
         }
     });
-  
-    socket.on('enviarLetra',function(msg){
-        var letra = msg.letra;
-        var mostrar = msg.mostrar;
-        letras.push(letra);
-    });
-
-    socket.on('resultado',function(msg){
-        palabra = msg.palabra;
-        var cadena='';
-
-        for (var q = 0; q < letras.length; q++) {
-            cadena = cadena + letras[q];
-        }
-
-        if (cadena===palabra) {
-            //Gano
-        }
-    });
-
-});
-
+    
+});       
 /**
  * numero_cuarto empezara en 0
  * Crear una nueva funcion de emparejamiento
@@ -151,20 +152,26 @@ io.on('connection', function(socket){
 
 var emparejarJugadores = function(clientes,miembros,cuarto){
   let newPlayer = 0;
+  
   newPlayer = buscarJugadorYCambiarStado(clientes);
-  if(miembros<2){
+  
+  if(miembros < 2)
+  {
     miembros++;
-  }else{
+  }
+  else
+  {
     miembros = 1;
     cuarto++;
   }
+  
   _iosm.joinRoom(newPlayer,cuarto);
+
   newPlayer.emit('iniciarJuego',{
     id:newPlayer.id,
     numero:newPlayer.numero,
     numCuarto:cuarto
   });
-
 
   /*if (newPlayer!==0) {
       if(newPartida.jugador1===0){
@@ -209,9 +216,9 @@ var emparejarJugadores = function(clientes,miembros,cuarto){
 };
 
 var buscarJugadorYCambiarStado = function(clientes){
-    let band = false;
-    let prioridad = 1;
-    let encontrado = null;
+    let band = false,
+        prioridad = 1,
+        encontrado = null;
     while(band === false && prioridad<=3){
         for (let i = 0; (band == false && i<clientes.length); i++) {
             if (
