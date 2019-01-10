@@ -7,7 +7,6 @@ var IOSManager = require('./managers/IOSocketManager');
 
 const _iosm = IOSManager();
 
-
 app.use(express.static('public'));
 
 var palabras = [],
@@ -31,11 +30,15 @@ io.on(
     clientesOnline.push(socket);
 
     emparejarJugadores(clientesOnline,io);
-        
+     
     socket.emit(
       'enviarCliente',
       {
-        data:'Bienvenido cliente '+contClientes
+        data:
+          'Bienvenido cliente '+
+          contClientes+
+          'Numero de sala: '+
+          numero_cuarto
       }
     );
 
@@ -94,54 +97,12 @@ io.on(
         console.log('---------------------------------------------------');
     });
   
-    socket.on(
-      'jugar',
-      function(msg){
-        let palabra = msg.palabra,
-        pista = msg.pista,
-        numero = msg.numero,
-        pareja = msg.pareja;
-        
-        if (palabras.length != 0) 
-        {
-          for(let y = 0; y < palabras.length;y++)
-          {
-            if (numero === palabras[y].pareja) 
-            {
-              let posicion1 = buscarPosicion(palabra[y].numero,clientesOnline);                  
-              clientes[posicion1].emit('recibirPalabra',{palabra:palabra,pista:pista});
-              let posicion2 = buscarPosicion(palabra[y].pareja,clientesOnline);
-              clientes[posicion2].emit('recibirPalabra',{palabra:palabra[y].palabra,pista:palabra[y].pista});
-            }else {
-                palabras.push({
-                  palabra:palabra,
-                  pista:pista,
-                  numero:numero,
-                  pareja:pareja
-                });        
-            }
-          }
-        }else{
-            palabras.push({
-                palabra:palabra,
-                pista:pista,
-                numero:numero,
-                pareja:pareja
-            });
-            console.log(JSON.stringify(palabras));
-        }
-    });
+    socket.on('eventoCuarto',function(data){
+
+        _iosm.sendRoomMsg(io,data.id_room,data.evento,data.info);
     
+    });    
 });       
-/**
- * numero_cuarto empezara en 0
- * Crear una nueva funcion de emparejamiento
- * Va a crear un cuarto nuevo cada 2 jugadores(con el numero_cuarto), 
- * empezando por el primero que llegue
- * Ingresas el primer jugador al cuarto, guardas el id, hasta que llegue el segundo jugador,
- * lo ingresas al mismo cuarto, y actualizas el id de cuarto con un numero_cuarto++
- * cada vez que ingresas un jugador al cuarto, le das el numero_cuarto al que pertenecen 
- */
 
 var emparejarJugadores = function(clientes,io){
   let newPlayer = 0;
@@ -167,53 +128,14 @@ var emparejarJugadores = function(clientes,io){
   });
 
   if(miembros_partida === 2){
+    console.log('numero cuarto: '+numero_cuarto);
     _iosm.sendRoomMsg(
       io,
-      numero_cuarto-1,
-      "jugarAhora",
-      ""
+      numero_cuarto,
+      'jugarAhora',
+      'Juegue'
     );
   }  
-  /*if (newPlayer!==0) {
-      if(newPartida.jugador1===0){
-        newPartida.jugador1=newPlayer;
-      }else if(newPartida.jugador2===0){
-        newPartida.jugador2=newPlayer;
-      }else{
-        //posible llamada recursiva si no empareja
-      }
-      if(newPartida.jugador1!==0){
-        newPartida.apuesta1 = 0;
-      }
-      if (newPartida.jugador2!==0) {
-          newPartida.apuesta2 = 0;
-      }
-      if(newPartida.jugador1!==0 && newPartida.jugador2!==0){
-        partidas.push({
-          jugador1:newPartida.jugador1,
-          jugador2:newPartida.jugador2,
-          apuesta1:newPartida.apuesta1,
-          apuesta2:newPartida.apuesta2
-        });        
-
-        posicion1 = buscarPosicion(newPartida.jugador1,clientesOnline);
-        clientes[posicion1].estado = PLAYERSTATE[2];
-        clientes[posicion1].emit('iniciarJuego',{
-            id:clientes[posicion1].id,
-            numero:clientes[posicion1].numero,
-            pareja:newPartida.jugador2
-        });
-        posicion2 = buscarPosicion(newPartida.jugador2,clientesOnline);
-        clientes[posicion2].estado = PLAYERSTATE[2];
-        clientes[posicion2].emit('iniciarJuego',{
-            id:clientes[posicion2].id,
-            numero:clientes[posicion2].numero,
-            pareja:newPartida.jugador1
-        });
-        newPartida.jugador1 = 0;
-        newPartida.jugador2 = 0;
-     }
-  }*/
 };
 
 var buscarJugadorYCambiarStado = function(clientes){

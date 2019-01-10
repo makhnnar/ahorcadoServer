@@ -41,12 +41,6 @@ io.on('connection',function(socket){
 
     });
 
-    socket.on('chat_room',function(data){
-
-        _ios.sendRoomMsg(io,data.id_room,'chat',data);
-    
-    });
-
     socket.on('room_join',function(data){
 
         _ios.joinRoom(socket,data.id_room);
