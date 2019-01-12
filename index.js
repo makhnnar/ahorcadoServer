@@ -96,6 +96,12 @@ io.on(
         }
         console.log('---------------------------------------------------');
     });
+
+    socket.on('resultado',function(data){
+
+         _iosm.sendRoomMsg(io,data.id_room,data.evento,data.info);
+    
+    });
   
     socket.on('eventoCuarto',function(data){
 

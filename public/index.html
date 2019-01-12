@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <title>Ahorcado</title>
+  </head>
+  <body>
+    <style>
+      input{
+        width:400px
+        margin:0 0 25px;
+        overflow:hidden;
+        padding:20px;
+        background-color:white;
+        border:1px solid black;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+      }
+      button{
+        width: 100px;
+        height: 60px;
+        background: #52A188 ;
+        border-radius: 6px;   
+      }
+      p{
+        font-size: 150%;
+      }      
+   </style>
+
+    <dialog id="entradas">
+      <input id="palabra" type="password" placeholder="Palabra a adivinar" name="">
+      <input id="pista" type="" placeholder="Pista" name="">
+      <button id="button" onclick="procesarDatos()">Procesar Datos</button>
+    </dialog>
+
+    <div>
+        <input id="letra" type="" placeholder="Letra" name="">
+        <button id="button1" onclick="ingresarletra()">Ingresar Letra</button>
+    </div>
+
+    <div id="mensajes">
+      <ul id="messages"></ul>
+      <p id="datosJuego"></p>
+      <p id="infoJuego"></p>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="/cliente.js"></script>
+
+  </body>
+</html>
