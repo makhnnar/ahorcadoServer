@@ -9,13 +9,11 @@ const _iosm = IOSManager();
 
 app.use(express.static('public'));
 
-var palabras = [],
-    PLAYERSTATE = ["sin jugar","esperando","jugando"],
+var PLAYERSTATE = ["sin jugar","esperando","jugando"],
     contClientes = 0,
     clientesOnline = [],
-    partidas = [],
-    newPartida = {jugador1:0,jugador2:0,apuesta1:0,apuesta2:0};
-
+    partidas = [];
+    
 var numero_cuarto = 0,
     miembros_partida = 0;
 
@@ -36,7 +34,7 @@ io.on(
       {
         data:
           'Bienvenido cliente '+
-          contClientes+
+          contClientes+" "+
           'Numero de sala: '+
           numero_cuarto
       }
@@ -97,15 +95,25 @@ io.on(
         console.log('---------------------------------------------------');
     });
 
-    socket.on('resultado',function(data){
+    socket.on(
+      'resultado',
+      function(data){
 
-         _iosm.sendRoomMsg(io,data.id_room,data.evento,data.info);
+        _iosm.sendRoomMsg(io,
+            data.id_room,
+            data.evento,
+            data.info);
     
     });
   
-    socket.on('eventoCuarto',function(data){
+    socket.on(
+      'eventoCuarto', 
+      function(data){
 
-        _iosm.sendRoomMsg(io,data.id_room,data.evento,data.info);
+        _iosm.sendRoomMsg(io,
+            data.id_room,
+            data.evento,
+            data.info);
     
     });    
 });       
@@ -113,7 +121,7 @@ io.on(
 var emparejarJugadores = function(clientes,io){
   let newPlayer = 0;
   
-  newPlayer = buscarJugadorYCambiarStado(clientes);
+  newPlayer = buscarJugadorYCambiarEstado(clientes);
   
   if(miembros_partida < 2)
   {
@@ -135,16 +143,17 @@ var emparejarJugadores = function(clientes,io){
 
   if(miembros_partida === 2){
     console.log('numero cuarto: '+numero_cuarto);
+
     _iosm.sendRoomMsg(
       io,
       numero_cuarto,
       'jugarAhora',
-      'Juegue'
+      'Juegue Ahora'
     );
   }  
 };
 
-var buscarJugadorYCambiarStado = function(clientes){
+var buscarJugadorYCambiarEstado = function(clientes){
     let band = false,
         prioridad = 1,
         encontrado = null;
@@ -169,13 +178,13 @@ var buscarJugadorYCambiarStado = function(clientes){
 };
 
 var buscarPosicion = function(numero, clientes){
-    let posicion1;
+    let posicion;
     for (let x = 0; x < clientes.length; x++) {
         if ( clientes[x].numero === numero) {
-            posicion1=x;     
+            posicion = x;     
         } 
     }
-    return posicion1;
+    return posicion;
 };
 
 var whoWins = function (valApuestaP1, valApuestaP2, posPartida, clientes) {

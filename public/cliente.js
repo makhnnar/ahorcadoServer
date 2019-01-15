@@ -17,7 +17,7 @@ var socket = {};
       myId,
       numero_cuarto;
    
-  socket.on('jugarAhora',function(msg){
+  socket.on('jugarAhora', function(msg){
     console.log(msg);
       (function(){
          var entradas = document.getElementById('entradas');
@@ -25,7 +25,7 @@ var socket = {};
       })();
   });
 
-  socket.on('ganador',function(msg){
+  socket.on('ganador', function(msg){
       if(myId != msg.id){
         alert(
           'Has Perdido'
@@ -64,18 +64,24 @@ var socket = {};
 var procesarDatos = function(){
     let palabraEnviar = document.getElementById('palabra').value,        
         pistaEnviar = document.getElementById('pista').value;
+        
         palabraEnviar = palabraEnviar.toLowerCase();
     
-    socket.emit('eventoCuarto',{io,
-                id_room:numero_cuarto,
-                evento:'recibirPalabra',
-                info:{id:myId,palabra:palabraEnviar,pista:pistaEnviar}});
+    socket.emit(
+      'eventoCuarto',
+            {
+              io,
+              id_room:numero_cuarto,
+              evento:'recibirPalabra',
+              info:{id:myId,palabra:palabraEnviar,pista:pistaEnviar}
+            });
     
     entradas.close();
 };
 
-var ingresarletra = function(){
+var ingresarLetra = function(){
     var letra = document.getElementById('letra').value;
+        
         letra = letra.toLowerCase();
 
     for (let k = 0; k < palabraRecibir.length; k++) {
@@ -87,12 +93,15 @@ var ingresarletra = function(){
     var mostrar = ocultarPalabra(palabraRecibir);
     
     if (mostrar === palabraRecibir) {
-        socket.emit('resultado',{io,
-                    id_room:numero_cuarto,                  
-                    evento:'ganador',
-                    info:{id:myId}
-        });
-    }
+        socket.emit(
+          'resultado',
+                {
+                  io,
+                  id_room:numero_cuarto,                  
+                  evento:'ganador',
+                  info:{id:myId}
+                });
+      }
 
     document.getElementById('datosJuego').innerHTML ='Palabra: ' +mostrar+ ' Pista: '+pistaRecibir;
     document.getElementById('letra').value = '';
