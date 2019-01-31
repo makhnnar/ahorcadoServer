@@ -1,0 +1,6 @@
+body {
+  	display:flex;
+  	flex:1;
+  	justify-content:center;
+  	min-width:100%;
+}

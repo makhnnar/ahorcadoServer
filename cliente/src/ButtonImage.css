@@ -1,0 +1,21 @@
+.boton {
+	display:flex;
+	flex:1;
+	flex-direction:row;
+  	background:#e91e63;
+ 	margin:40px;
+ 	justify-content:center;
+ 	align-items:center;	
+ 	min-width:60%;
+ 	border-radius:10px;
+}
+
+.imagen {
+	margin-right:20px;
+}
+
+.texto {
+	color:black; 
+}
+
+
