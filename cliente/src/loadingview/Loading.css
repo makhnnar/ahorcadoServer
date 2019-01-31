@@ -1,0 +1,13 @@
+.Loading{
+	display:flex;
+	flex:1;
+	flex-direction:column;
+ 	margin:40px;
+ 	justify-content:center;
+ 	align-items:center;	
+ 	min-width:60%;
+}
+
+.texto{
+	color:white;
+}

@@ -1,0 +1,47 @@
+.VistaMain{
+    text-align: center;
+}
+.state{
+	color:white;
+	background-color:purple;
+	border-radius: 5px;
+}
+.palabraOculta{
+	background-color:purple;
+	border-radius: 5px;
+	color:white;
+}
+.letra{
+	display: flex;
+}
+.informacion{
+ 	color:white;
+ 	background-color:purple;
+	border-radius: 5px;
+}
+
+#button{
+    margin-top:42px;
+	display: flex;
+	background: #33B1FF;
+	width: 200px;
+    height: 70px;
+    margin-right:30px;
+    margin-left: 100px; 
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 10px
+}
+
+input{
+    width: 70px;
+    height: 20px;
+    overflow:hidden;
+    padding:20px;
+    margin-left:10px;
+    background-color:white;
+    border:1px solid black;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+   	margin-top:25px;
+}
