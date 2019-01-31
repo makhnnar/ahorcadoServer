@@ -1,42 +1,16 @@
 import React, { Component } from 'react';
-import './App.css';
-import { createNavigator,
-  SwitchRouter,
-  SceneView } from "@react-navigation/core";
-import { createBrowserApp } from "@react-navigation/web";
-import Login from './views/login/Login.js'
-import Alone from './views/alone/Alone.js'
-import Forgot from './views/forgot/Forgot.js'
-import Signup from './views/signup/Signup.js'
-import Vs from './views/vs/Vs.js'
-import Wellcome from './views/wellcome/Wellcome.js'
+import Loading from './loadingview/Loading';
+import GameView from './gameview/main/GameView';
+import Inicio from './gameview/setwords/Inicio';
+import './App.css'
 
-const MyNavigator = createSwitchNavigator(routes);
-
-const App = createBrowserApp(MyNavigator);
-
-class App extends Component {
+export default class App extends React.Component {
   render() {
     return (
-      <div className="App">
-      	<Login/>
+      <div className="App"> 
+      	<Loading/> 
       </div>
     );
   }
 }
 
-const AppNavigator = createNavigator(
-  SidebarView,
-  SwitchRouter({
-    Login,
-    Alone,
-    Forgot,
-    Signup,
-    Vs,
-    Wellcome
-  }),
-  {}
-);
-
-const App = createBrowserApp(AppNavigator);
-export default App;

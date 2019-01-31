@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import './ButtonImage.css';
-import imagenTest from './nature-115611.jpg'
+import './Css/ButtonImage.css';
 
-class ButtonImage extends Component {
+
+export default class ButtonImage extends React.Component {
   render() {
     return (
       <div className="boton">
-        <div className="imagen">
+        <div className="img">
             <img src={imagenTest} alt="Img" height="35" width="35"/>
         </div>
-        <div className="texto">
+        <div className="textoBoton">
           <p>
             JUGAR
           </p>
@@ -19,4 +19,3 @@ class ButtonImage extends Component {
   }
 }
 
-export default ButtonImage;
