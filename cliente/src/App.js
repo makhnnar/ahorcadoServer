@@ -9,7 +9,6 @@ import AppNavigator from "./Navigator";
 import { createSwitchNavigator } from "@react-navigation/core";
 import { createBrowserApp } from "@react-navigation/web";
 
-
 const App = createBrowserApp(AppNavigator);
 
 export default App;
