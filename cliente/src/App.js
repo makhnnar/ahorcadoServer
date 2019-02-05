@@ -9,7 +9,7 @@ import AppNavigator from "./Navigator";
 import { createSwitchNavigator } from "@react-navigation/core";
 import { createBrowserApp } from "@react-navigation/web";
 
-
+//esto es un comentario de prueba
 const App = createBrowserApp(AppNavigator);
 
 export default App;
