@@ -4,7 +4,17 @@ import GameView from './gameview/main/GameView';
 import Inicio from './gameview/setwords/Inicio';
 import './App.css'
 
-export default class App extends React.Component {
+import AppNavigator from "./Navigator";
+
+import { createSwitchNavigator } from "@react-navigation/core";
+import { createBrowserApp } from "@react-navigation/web";
+
+
+const App = createBrowserApp(AppNavigator);
+
+export default App;
+
+/*export default class App extends React.Component {
   render() {
     return (
       <div className="App"> 
@@ -12,5 +22,5 @@ export default class App extends React.Component {
       </div>
     );
   }
-}
+}*/
 
