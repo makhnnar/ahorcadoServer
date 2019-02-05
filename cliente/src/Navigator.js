@@ -8,6 +8,12 @@ import {
   import Loading from './loadingview/Loading';
   import GameView from './gameview/main/GameView';
   import Inicio from './gameview/setwords/Inicio';
+  import Login from './views/login/Login.js';
+  import Alone from './views/alone/Alone.js';
+  import Forgot from './views/forgot/Forgot.js';
+  import Signup from './views/signup/Signup.js';
+  import Wellcome from './views/wellcome/Wellcome.js';
+  import Vs from './views/vs/Vs.js';
 
   import AppView from "./AppView";
   //import SidebarView from "./SidebarView";

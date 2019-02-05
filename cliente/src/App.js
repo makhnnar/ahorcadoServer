@@ -3,6 +3,7 @@ import Loading from './loadingview/Loading';
 import GameView from './gameview/main/GameView';
 import Inicio from './gameview/setwords/Inicio';
 import './App.css'
+import Login from './views/login/Login.js';
 
 import AppNavigator from "./Navigator";
 

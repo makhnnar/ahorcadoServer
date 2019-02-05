@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-class App Alone Component {
+class Vs extends Component {
   render() {
     return (
       <div className="App">
-      	
+
       </div>
     );
   }
 }
 
-export default Alone;
+export default Vs;

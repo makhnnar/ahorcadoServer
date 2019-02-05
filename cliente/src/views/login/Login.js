@@ -10,9 +10,9 @@ class Login extends Component {
       		<input type="text" value="Ingrese su contraseña"/><br/>
       		<button>Login</button><br/>
       		<hr/>
-      		<Link toRoute="Profile" params={{ name: "jamie" }}>
+      		<link toRoute="Profile" params={{ name: "jamie" }}>
             recuperar
-          </Link>
+          </link>
       		<hr/>
       		<button><img src=""/></button><br/>
       		<button><img src=""/></button><br/>
