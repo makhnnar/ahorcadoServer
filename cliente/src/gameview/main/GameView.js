@@ -4,13 +4,13 @@ import './GameView.css';
 export default class VistaMain extends React.Component {
   render() {
     return (
-      <div className='VistaMain'>
-        <div className='informacion'>
+      <div className='GameView'>
+        <div className='inf-oponent'>
           <p>                                     
-            Pista / N° Oponente / Coincidencias     
+            Pista  /  N° Oponente  /  Coincidencias / Tiempo    
           </p>
         </div>
-        <div className='letra'>
+        <div className='ingresar-letra'>
           <input
             type='text'  
             id='letra'
@@ -22,12 +22,12 @@ export default class VistaMain extends React.Component {
         </div>
         <div className='palabraOculta'>
           <p>
-            Palabra Oculta ******
+            Palabra Oculta = ********
           </p>
         </div>
         <div className='state'>
           <p>
-            Estado Oponente
+            Oponent State = Inactivo
           </p>
         </div>
       </div>

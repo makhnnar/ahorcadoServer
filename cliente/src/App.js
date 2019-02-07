@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
+import './App.css'
+
 import Loading from './loadingview/Loading';
 import GameView from './gameview/main/GameView';
 import Inicio from './gameview/setwords/Inicio';
-import './App.css'
+import ButtonImage from './ButtonImage';
 
 import AppNavigator from "./Navigator";
 
 import { createSwitchNavigator } from "@react-navigation/core";
 import { createBrowserApp } from "@react-navigation/web";
 
-//esto es un comentario de prueba
 const App = createBrowserApp(AppNavigator);
 
 export default App;
@@ -18,9 +19,8 @@ export default App;
   render() {
     return (
       <div className="App"> 
-      	<Loading/> 
+      	<Inicio/> 
       </div>
     );
   }
 }*/
-

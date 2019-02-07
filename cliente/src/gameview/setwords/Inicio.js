@@ -5,21 +5,19 @@ export default class Inicio extends React.Component {
   render() {
     return (
       <div className='Inicio'>
-        <div className='cajas'>
+        <div className='cajas-text'>
           <input 
-            id='palabra'
             placeholder='Palabra a adivinar'
             type='text'
           />
-          <input 
-            id='pista' 
+          <input  
             type='text' 
             placeholder='Pista' 
           />
         </div>
-        <div className='boton'>
+        <div className='button-init'>
           <p>
-            Aceptar
+            Aceptar y Enviar
           </p>
         </div>
       </div>

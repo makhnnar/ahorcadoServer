@@ -47,8 +47,18 @@ export default class AppView extends Component {
           <Link routeName={"Loading"} navigation={navigation}>
             Loading
           </Link>
-
           </div>
+
+          <div
+            style={{
+                borderBottom: "1px solid #99b",
+                padding: 20
+            }}
+          >
+          <Link routeName={"ButtonImage"} navigation={navigation}>
+            ButtonImage
+          </Link>
+          </div> 
         </div>
         <div>
           <SceneView

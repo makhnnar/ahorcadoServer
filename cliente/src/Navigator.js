@@ -8,7 +8,7 @@ import {
   import Loading from './loadingview/Loading';
   import GameView from './gameview/main/GameView';
   import Inicio from './gameview/setwords/Inicio';
-
+  import ButtonImage from './ButtonImage';
   import AppView from "./AppView";
   //import SidebarView from "./SidebarView";
   
@@ -33,7 +33,8 @@ import {
     SwitchRouter({
       Inicio,
       GameView,
-      Loading
+      Loading,
+      ButtonImage
     }),
     {}
   );
