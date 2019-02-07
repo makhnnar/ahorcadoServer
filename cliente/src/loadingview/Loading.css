@@ -1,11 +1,26 @@
+.logo{
+  animation:logo-spin infinite 20s linear;
+  height: 10vmin;
+  width: 10vmin;
+}
+@keyframes logo-spin {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
 .Loading{
 	display:flex;
 	flex:1;
 	flex-direction:column;
- 	margin:40px;
+ 	margin:10px;
  	justify-content:center;
  	align-items:center;	
- 	min-width:60%;
+ 	min-width:100vw;
+ 	min-height: 100vh;
 }
 
 .texto{
