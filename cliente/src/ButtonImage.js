@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './ButtonImage.css';
-import imagenTest from './play.jpg';
+import imagenTest from './nature-115611.jpg';
 
 export default class ButtonImage extends React.Component {
   render() {

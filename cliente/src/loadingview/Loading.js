@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Loading.css';
-import imagenTest from './arrowait.png'
+import imagenTest from './1amw.gif'
 
 export default class Loading extends React.Component {
   render() {

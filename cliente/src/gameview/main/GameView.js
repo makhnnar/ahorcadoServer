@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import './GameView.css';
 
 export default class VistaMain extends React.Component {
-
-  static navigationOptions = {
-    title: "GameView",
-    linkName: "GameView"
-  };
-
   render() {
     return (
       <div className='GameView'>
