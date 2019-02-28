@@ -1,27 +1,41 @@
 import React, { Component } from 'react';
+
 import Loading from './loadingview/Loading';
+
 import GameView from './gameview/main/GameView';
+
 import Inicio from './gameview/setwords/Inicio';
+
+import Login from './views/login/Login';
+
 import './App.css'
-import Login from './views/login/Login.js';
 
-import AppNavigator from "./Navigator";
+import Signup from "./views/signup/Signup";
 
-import { createSwitchNavigator } from "@react-navigation/core";
-import { createBrowserApp } from "@react-navigation/web";
+import {
+  NavLink,
+  HashRouter
+} from "react-router-dom";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 
-const App = createBrowserApp(AppNavigator);
-
-export default App;
-
-/*export default class App extends React.Component {
+class App extends Component {
   render() {
     return (
-      <div className="App"> 
-      	<Loading/> 
-      </div>
+    	<Router>
+	      	<div className="App">
+				<div className="content">
+		            
+		            <Route path="/Login" component={Login}/><br/>
+		            
+		            <Route path="/Signup" component={Signup}/><br/>
+	          	
+	          	</div>
+			
+	      	</div>
+	    </Router>
     );
   }
-}*/
+}
 
+export default App;

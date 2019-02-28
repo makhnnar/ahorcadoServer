@@ -16,14 +16,17 @@ import {
   import Vs from './views/vs/Vs.js';
 
   import AppView from "./AppView";
-  //import SidebarView from "./SidebarView";
+  import SidebarView from "./SidebarView";
   
-  /*const Docs = createNavigator(
+  const Docs = createNavigator(
     SidebarView,
     SwitchRouter({
-      DocHome,
-      DocA,
-      DocB
+      Login,
+      Alone,
+      Forgot,
+      Signup,
+      Wellcome,
+      Vs
     }),
     {
       navigationOptions: ({ navigation, screenProps }) => {
@@ -32,7 +35,7 @@ import {
       }
     }
   );
-  Docs.path = "docs";*/
+  Docs.path = "docs";
   
   const AppNavigator = createNavigator(
     AppView,
