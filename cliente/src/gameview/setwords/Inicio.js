@@ -17,12 +17,9 @@ export default class Inicio extends React.Component {
             placeholder='Pista' 
           />
         </div>
-        <div className='boton'>
-          <p>
-            Aceptar
-          </p>
-        </div>
       </div>
     );
   }
 }
+
+

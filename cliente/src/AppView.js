@@ -9,8 +9,9 @@ export default class AppView extends Component {
     const descriptor = descriptors[activeKey];
     return (
       <div style={{ height: "100%" }}>
-        <h1>My Project</h1>
-        <div
+        <div>
+          
+          <div
           style={{
             borderBottom: "1px solid #99b",
             padding: 20
@@ -50,7 +51,9 @@ export default class AppView extends Component {
 
           </div>
         </div>
-        <div>
+
+
+
           <SceneView
             navigation={descriptor.navigation}
             component={descriptor.getComponent()}
@@ -60,3 +63,12 @@ export default class AppView extends Component {
     );
   }
 }
+
+
+/*
+
+
+
+
+
+*/
