@@ -1,7 +1,14 @@
-import React, { Component } from 'react';
+import React, {
+   Component 
+} from 'react';
+
 import Logincss from './Login.css';
-import Signup from '../signup/Signup';
-import { BrowserRouter as Redirect, Router, Route, Link } from "react-router-dom";
+
+import { 
+  Route, 
+  Redirect,
+  withRouter
+} from "react-router-dom";
 
 class Login extends Component {
   
@@ -22,10 +29,10 @@ class Login extends Component {
     return (
       <div className="container">
       	<div className="login">
-          <Route exact path="/Login" render={
+          <Route exact path="/login" render={
               () => (
                 this.state.condicion?
-                  <Signup/>
+                  <Redirect to="/signup"/>
                   :
                   <div>
                     <input type="email" placeholder="Ingrese su correo"/><br/>
