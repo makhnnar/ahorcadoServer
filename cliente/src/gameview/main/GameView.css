@@ -1,6 +1,16 @@
-.GameView{
-    
+button{
+    margin-top:15px;
+    margin-left: 260px;
+    display: flex;
+    justify-content: center;
+    height: 50px;
+    width: 150px;
+    background:#F7200E;
+    align-items:center;
+    border-radius:10px;
+    font-family:Arial, Helvetica, sans-serif
 }
+
 .state{
     display:flex;
     justify-content:center;
