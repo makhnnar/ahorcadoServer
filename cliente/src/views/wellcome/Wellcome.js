@@ -5,10 +5,10 @@ class Wellcome extends Component {
     return (
       <div className="App">
       	<div>
-      		
+      		uyguyg
       	</div>
       	<div>
-      		
+                		
       	</div>
       </div>
     );
