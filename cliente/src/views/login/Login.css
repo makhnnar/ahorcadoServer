@@ -10,3 +10,9 @@
 	text-align: center;
 	-ms-display: flex;
 }
+
+.boton{
+	text-decoration: none;
+	color: #ffffff;
+	background-color: #005bbb;
+}

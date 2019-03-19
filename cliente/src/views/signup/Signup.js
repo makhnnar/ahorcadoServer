@@ -13,9 +13,9 @@ class Signup extends Component {
         <input placeholder="Ingrese su Email" type="email"/><br/>
         <input placeholder="Ingrese una Contraseña" type="text"/>
         <input placeholder="Repita la Contraseña" type="text"/><br/>
-        <button>Suscribir</button>
+        <button className="boton">Suscribir</button>
         <hr/>
-        <Link to="/Login">Volver</Link><br/>
+        <Link className="boton" to="/Login">Volver</Link><br/>
       </div>
     );
   }

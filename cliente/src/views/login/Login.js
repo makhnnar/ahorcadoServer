@@ -11,14 +11,14 @@ class Login extends Component {
       	<div className="login">
           <input type="email" placeholder="Ingrese su correo"/><br/>
           <input type="text" placeholder="Ingrese su contraseña"/><br/>
-          <button>ENVIAR</button><br/>
+          <button className="boton">ENVIAR</button><br/>
           <hr/>
-          <Link to="/Forgot">Recuperar contraseña</Link>
+          <Link className="boton" to="/Forgot">Recuperar contraseña</Link>
           <hr/>
           <button></button><br/>
           <button></button><br/>
           <hr/>
-          <Link to="/Signup">Registrar</Link><br/>
+          <Link className="boton" to="/Signup">Registrar</Link><br/>
         </div>
       </div>
     );
