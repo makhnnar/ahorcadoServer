@@ -1,186 +1,133 @@
-import React, { Component } from 'react';
+import 
+	React, 
+	{ Component } 
+from 'react';
+
 //import Signupcss from './Signup.css';
-import {BrowserRouter as Redirect, Router, Route, Link } from "react-router-dom";
+
+import {
+	BrowserRouter as Redirect,
+	Router,
+	Route,
+	Link 
+} from "react-router-dom";
 
 const cpersona = 'http://localhost:3005/crearpersona';
 const cusuario = 'http://localhost:3005/crearusuario';
 
 class Signup extends Component {
 
-  constructor(props){
+	constructor(props) {
 		super(props);
-		this.state={
-			//	persona:[],
-			//	id1:0,
-			//	usuario:[],
-			//	id2:0,
-			//	render:false,
-        nickname:'',
-        fecha:0,
-				email:'',
-				pass:'',
-				value:'',
-				nombre:''
-		  }
-  	}
+		this.state = {
+			value:'',
+			name:'',
+			nickname:'',
+			date:''
+		};
+		//bindeo de los eventos
+		this.handleChange = this.handleChange.bind(this);
+		this.handleNameChange = this.handleNameChange.bind(this);
+		this.handleNicknameChange = this.handleNicknameChange.bind(this);
+		this.handleDateChange = this.handleDateChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
 
-  /*onPress = ()=>{
-		console.log('presiono');
-		console.log('Nombre: '+this.state.nombre+', Usuario: '+this.state.nickname+', Fecha: '+this.state.fecha);
-		//alert(JSON.stringify('Nombre: '+this.state.nombre+', Usuario: '+this.state.nickname+', Fecha: '+this.state.fecha));
- 		fetch(
-	      	cpersona,
-	      	{
-		    	method: 'POST',
-		    	headers:{
-		    	'Content-Type': 'application/json',
-		    	'Access-Control-Allow-Origin': '*'
-		    	},
-	        	body:JSON.stringify({
-								nombre:nombre,
-								nickname:nickname,
-								fecha:fecha
-	        	})
-		    }
+  createNewUser = () => {
+		fetch(
+			cpersona,
+			{
+				method: 'POST',
+				headers:{
+					'Content-Type': 'application/json',
+					'Access-Control-Allow-Origin': '*'
+				},
+				body:JSON.stringify({
+						nombre:this.state.name,
+						nickname:+this.state.nickname,
+						fecha:this.state.date
+				})
+			}
 		).then(
 			(res) => res.json()
 		).then(
-		    (data) => {
-		        let detalles = data.data;
-		        console.log(JSON.stringify(data.data));
-		        console.log(' ');
-		        let render = true;
-		        this.setState({cpersona,render});
-		    }
+			(data) => {
+					let detalles = data.data;
+					let render = true;
+					this.setState({cpersona,render});
+			}
 		).catch(
-        (error) => { 
-            console.log('Error:'+error);
-            console.log('error en mostrar detalles');
-        }
-      );
-}*/
+			(error) => { 
+					console.log('Error:'+error);
+					console.log('error en mostrar detalles');
+			}
+		);
+	}
 
-	/*handleNombre(text){
-		this.setState({nombre: text.target.value})
-		//alert(JSON.stringify(this.state.nombre));
-		//console.log('se cambio el valor del nombre');
+	handleNameChange(event) {
+		this.setState({name: event.target.value});
 	}
-	handleNickname(text){
-		this.setState({nickname: text.target.value})
-		//alert(JSON.stringify(this.state.nickname));
-	}
-	handleFecha(text){
-		this.setState({fecha: text.target.value})
-		//alert(JSON.stringify(this.state.fecha));
-	}
-	handleEmail(text){
-		this.setState({email: text.target.value})
-		//alert(JSON.stringify(this.state.email));
-	}
-	handlePass(text){
-		this.setState({pass: text.target.value})
-		//alert(JSON.stringify(this.state.pass));
-		//alert(JSON.stringify('nombre: '+this.state.nombre+', nickname: '+this.state.nickname+', Fecha: '+this.state.fecha+', Email: '+this.state.pass+', Pass: '+this.state.pass));
-		//console.log('nombre: '+this.state.nombre+', nickname: '+this.state.nickname+', Fecha: '+this.state.fecha+', Email: '+this.state.pass+', Pass: '+this.state.pass);
-	}*/
 
-	handleChange=this.handleChange.bind(this);
-	handleChangeNombre=this.handleChangeNombre.bind(this);
-	handleSubmit=this.handleSubmit.bind(this);
+	handleNicknameChange(event) {
+		this.setState({nickname: event.target.value});
+	}
 
-	handleChange(event){
+	handleDateChange(event) {
+		this.setState({date: event.target.value});
+	}
+
+	handleChange(event) {
 		this.setState({value: event.target.value});
 	}
 
-	handleChangeNombre(event){
-		this.setState({nombre: event.target.nombre});
+	handleSubmit(event) {
+		/*
+			asi como esta consume los valores de forma eficiente. Sigue este mismo esquema
+			debes terminar los demas detalles. Borre el resto del codigo ya que no hacian falta
+			Completa lo demas, valida tipos de datos, y acomoda estilos. Si vas a utilizar hints
+			hazlo usando un esquema vertical, sino, deja los labels. tu problema era que no hacias el this.state.nombrevalor
+			para acceder al valor en el fetch, y que obviamente no estabas bindeando los eventos
+		*/
+		alert('Nuestros valores de los campos de texto: ' + JSON.stringify(this.state));
+		this.createNewUser();
+		event.preventDefault();
 	}
 
-	handleSubmit(event){
-		event.preventDefault();
-		alert(JSON.stringify('primero: '+this.state.value+', nombre: '+this.state.nombre);
+	render() {
+		return (
+			<form onSubmit={this.handleSubmit}>
+				<label>
+					Value:
+					<input 
+						type="text" value={this.state.value}
+						onChange={this.handleChange}
+					/>
+				</label>
+				<label>
+					Name:
+					<input 
+						type="text" value={this.state.name}
+						onChange={this.handleNameChange}
+					/>
+				</label>
+				<label>
+					Nickname:
+					<input 
+						type="text" value={this.state.nickname}
+						onChange={this.handleNicknameChange}
+					/>
+				</label>
+				<label>
+					Fecha:
+					<input 
+						type="text" value={this.state.date}
+						onChange={this.handleDateChange}
+					/>
+				</label>
+				<input type="submit" value="Submit" />
+			</form>
+		);
 	}
-    
-  render() {
-		//alert(JSON.stringify(this.state.value+' '+this.state.nombre));
-		//alert(this.state.value+' '+this.state.nombre);
-    return (
-      <div className="containerr">
-				<form onSubmit={this.handleSubmit} >
-					<input type="text" value={this.state.value}
-					onChange={this.handleChange}
-					/><br/>
-					
-					<input 
-						placeholder="Ingrese su Nombre"
-						className="nombre"
-						name="nombre"
-						type="text"
-						value={this.state.nombre}
-						onChange={this.handleChangeNombre}
-					/>
-					<input 
-						placeholder="Ingrese su Usuario" 
-						className="nickname" 
-						name="nickname" 
-						type="text"
-						value={this.state.nickname}
-						onChange={this.handleChangeNickname}
-					/><br/>
-					<input 
-						className="fecha" 
-						name="fecha"
-						type="date"
-						value={this.state.fecha}
-						onChange={this.handleChangeFecha}
-					/>
-					<input 
-						placeholder="Ingrese su Email" 
-						className="email" 
-						name="email" 
-						type="email"
-						value={this.state.email}
-						onChange={this.handleChangeEmail}
-					/><br/>
-					<input 
-						placeholder="Ingrese una Contraseña"
-						className="pass"
-						name="pass"
-						type="text"
-						value={this.state.pass}
-						onChange={this.handleChangePass}
-					/>
-					<input
-						placeholder="Repita la Contraseña"
-						className="pass2"
-						name="pass2"
-						type="text"
-					/><br/>
-					<input 
-						type="submit"
-						value="Suscribir"
-					/>
-				</form><hr/>
-				<Link className="boton" to="/Login">Volver</Link><br/>
-      </div>
-    );
-  }
 }
 
 export default Signup;
-
-/*
-
-<div className="containerr">
-	<input placeholder="Ingrese su Nombre" className="nombre" name="nombre" type="text"/>
-	<input placeholder="Ingrese su Usuario" className="nickname" name="nickname" type="text"/><br/>
-	<input className="fecha" name="fecha" type="date"/>
-	<input placeholder="Ingrese su Email" className="email" name="email" type="email"/><br/>
-	<input placeholder="Ingrese una Contraseña" className="pass" name="pass" type="text"/>
-	<input placeholder="Repita la Contraseña" className="pass2" name="pass2" type="text"/><br/>
-	<button press={this.onPress} className="boton">Suscribir</button>
-	<hr/>
-	<Link className="boton" to="/Login">Volver</Link><br/>
-</div>
-
-*/
