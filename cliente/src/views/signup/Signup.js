@@ -12,24 +12,25 @@ import {
 	Link 
 } from "react-router-dom";
 
-const cpersona = 'http://localhost:3005/crearpersona';
-const cusuario = 'http://localhost:3005/crearusuario';
+const cpersona = 'http://localhost:3005/crear_nuevo_usuario';
 
 class Signup extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			value:'',
-			name:'',
-			nickname:'',
-			date:''
+			nombre:'',
+      nickname:'',
+      fecha:0,
+			email:'',
+		  pass:''
 		};
 		//bindeo de los eventos
-		this.handleChange = this.handleChange.bind(this);
+		this.handleEmailChange = this.handleEmailChange.bind(this);
 		this.handleNameChange = this.handleNameChange.bind(this);
 		this.handleNicknameChange = this.handleNicknameChange.bind(this);
-		this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
@@ -43,18 +44,21 @@ class Signup extends Component {
 					'Access-Control-Allow-Origin': '*'
 				},
 				body:JSON.stringify({
-						nombre:this.state.name,
-						nickname:+this.state.nickname,
-						fecha:this.state.date
+					nombre:this.state.nombre,
+					nickname:this.state.nickname,
+            		fecha:this.state.fecha,
+            		email:this.state.email,
+            	pass:this.state.pass
 				})
 			}
 		).then(
 			(res) => res.json()
 		).then(
-			(data) => {
-					let detalles = data.data;
-					let render = true;
-					this.setState({cpersona,render});
+			(response) => {
+				console.log('entro '+JSON.stringify(response.data));
+				//let detalles = DB.DB;
+				//let render = true;
+				//this.setState({detalles,render});
 			}
 		).catch(
 			(error) => { 
@@ -65,19 +69,23 @@ class Signup extends Component {
 	}
 
 	handleNameChange(event) {
-		this.setState({name: event.target.value});
+		this.setState({nombre: event.target.value});
 	}
 
 	handleNicknameChange(event) {
 		this.setState({nickname: event.target.value});
+  }
+  
+  handlePasswordChange(event) {
+		this.setState({pass: event.target.value});
 	}
 
 	handleDateChange(event) {
-		this.setState({date: event.target.value});
+		this.setState({fecha: event.target.value});
 	}
 
-	handleChange(event) {
-		this.setState({value: event.target.value});
+	handleEmailChange(event) {
+		this.setState({email: event.target.value});
 	}
 
 	handleSubmit(event) {
@@ -95,37 +103,47 @@ class Signup extends Component {
 
 	render() {
 		return (
-			<form onSubmit={this.handleSubmit}>
-				<label>
-					Value:
-					<input 
-						type="text" value={this.state.value}
-						onChange={this.handleChange}
-					/>
-				</label>
-				<label>
-					Name:
-					<input 
-						type="text" value={this.state.name}
-						onChange={this.handleNameChange}
-					/>
-				</label>
-				<label>
-					Nickname:
-					<input 
-						type="text" value={this.state.nickname}
-						onChange={this.handleNicknameChange}
-					/>
-				</label>
-				<label>
-					Fecha:
-					<input 
-						type="text" value={this.state.date}
-						onChange={this.handleDateChange}
-					/>
-				</label>
-				<input type="submit" value="Submit" />
-			</form>
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Nombre:
+            <input 
+              type="text" value={this.state.nombre}
+              onChange={this.handleNameChange}
+            />
+          </label><br/>
+          <label>
+            Nombre de usuario:
+            <input 
+              type="text" value={this.state.nickname}
+              onChange={this.handleNicknameChange}
+            />
+          </label><br/>
+          <label>
+            Fecha de nacimiento:
+            <input 
+              type="date" value={this.state.fecha}
+              onChange={this.handleDateChange}
+            />
+          </label><br/>
+          <label>
+            Email:
+            <input 
+              type="email" value={this.state.email}
+              onChange={this.handleEmailChange}
+            />
+          </label><br/>
+          <label>
+            Clave:
+            <input 
+              type="text" value={this.state.pass}
+              onChange={this.handlePasswordChange}
+            />
+          </label><br/>
+          <input type="submit" value="Submit" />
+        </form><hr/>
+        <Link className="boton" to="/Login">Volver</Link><br/>
+      </div>
 		);
 	}
 }

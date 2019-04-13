@@ -9,8 +9,22 @@ class Login extends Component {
     return (
       <div className="container">
       	<div className="login">
-          <input type="email" placeholder="Ingrese su correo"/><br/>
-          <input type="text" placeholder="Ingrese su contraseña"/><br/>
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Email:
+            <input 
+              placeholder="Ingrese su correo"
+              type="email" value={this.state.email}
+              onChange={this.handleEmailChange}
+            /><br/>
+          </label><br/>
+          <label>
+            Clave:
+            <input
+              placeholder="Ingrese su contraseña" 
+              type="text" value={this.state.pass}
+              onChange={this.handlePasswordChange}
+            /><br/>
           <button className="boton">ENVIAR</button><br/>
           <hr/>
           <Link className="boton" to="/Forgot">Recuperar contraseña</Link>
