@@ -80,7 +80,7 @@ var Database = function(){
 
   this.loguear = function(email, pass, cb){
     console.log('Revisando usuario');
-    var sql = "SELECT * FROM usuario WHERE email = $1 pass = $2";
+    var sql = "SELECT * FROM usuario WHERE email = $1 and password = $2";
     //fecha = new Date(fecha).getTime();
     this.query(
       sql,
