@@ -78,6 +78,24 @@ var Database = function(){
     );
   };
 
+  this.loguear = function(email, pass, cb){
+    console.log('Revisando usuario');
+    var sql = "SELECT * FROM usuario WHERE email = $1 pass = $2";
+    //fecha = new Date(fecha).getTime();
+    this.query(
+      sql,
+      [email,pass],
+      () => {
+        console.log('datos erroneos');
+        cb(true,null);
+      },
+      (res) => {
+        console.log(JSON.stringify(res));
+        console.log('Datos correctos');
+        cb(null,res);
+      }
+    );
+  }
 };
 
 module.exports = function(){

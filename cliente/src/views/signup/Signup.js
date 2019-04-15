@@ -140,7 +140,7 @@ class Signup extends Component {
               onChange={this.handlePasswordChange}
             />
           </label><br/>
-          <input type="submit" value="Submit" />
+          <input type="submit" value="SUSCRIBIR" />
         </form><hr/>
         <Link className="boton" to="/Login">Volver</Link><br/>
       </div>
