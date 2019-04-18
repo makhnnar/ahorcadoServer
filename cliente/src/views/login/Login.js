@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Logincss from './Login.css';
 import {BrowserRouter as Redirect, Router, Route, Link } from "react-router-dom";
 
-const buscarusuario = 'http://localhost:3005/post_loguear';
+const buscarusuario = 'http://localhost:3005/loguear';
 
 class Login extends Component {
   constructor(props) {

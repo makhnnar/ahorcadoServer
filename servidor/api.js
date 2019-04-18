@@ -48,7 +48,6 @@ restApi.post('/crear_nuevo_usuario',(req,res) => {
             data:'no created data'
           });
         }else{
-          
           manager.crearusuario(
             valor.email,
             valor.pass,
@@ -72,7 +71,7 @@ restApi.post('/crear_nuevo_usuario',(req,res) => {
     );
   });
 
-  restApi.post('/post_loguear',(req,res)=>{
+  restApi.post('/loguear',(req,res)=>{
     console.log(' ');
     console.log('valores: '+JSON.stringify(req.body));
     console.log(' ');
@@ -97,6 +96,52 @@ restApi.post('/crear_nuevo_usuario',(req,res) => {
       }
     );
   });
+
+  restApi.post('/cambiar_clave',(req,res) =>{
+    console.log(' ');
+    console.log('valores: '+JSON.stringify(req.body));
+    console.log(' ');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    let valor = req.body;
+    manager.cambiarContraseña(
+      valor.email,
+      (error,result) => {
+        if(error){
+          res.send({
+            status:'error',
+            data:'No se pudo acceder'
+          });
+        }else{
+          res.send({
+          status:'success',
+          data:'Consultando y cambiando'
+          });
+        }
+      }
+    );
+  });
+
+/*
+  manager.cambiarContraseña(
+    valor.email,
+    valor.pass,
+    (error,result) => {
+      if(error){
+        res.send({
+          status:'error',
+          data:'No se pudo acceder'
+        });
+      }else{
+        res.send({
+        status:'success',
+        data:'Revisando usuario'
+        });
+      }
+    }
+  );
+  */
+
 
   /*
   

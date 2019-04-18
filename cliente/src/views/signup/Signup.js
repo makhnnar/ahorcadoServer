@@ -55,7 +55,7 @@ class Signup extends Component {
 			(res) => res.json()
 		).then(
 			(response) => {
-				console.log('entro '+JSON.stringify(response.data));
+				console.log(' '+JSON.stringify(response.data));
 				//let detalles = DB.DB;
 				//let render = true;
 				//this.setState({detalles,render});
