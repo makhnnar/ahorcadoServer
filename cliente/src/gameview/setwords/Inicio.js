@@ -1,32 +1,59 @@
 import React, { Component } from 'react';
 import './Inicio.css';
-import { Route, Redirect, withRouter} from 'react-router-dom'; 
+import SocketCliente from '../../socket/SocketCliente';
 
-const Inicio = (props) => {
-    
-      const { history } = props;
+import { 
+  Route,
+  Redirect, 
+  withRouter
+} from 'react-router-dom'; 
 
-      return (
+class Inicio extends Component {
+      
+      constructor(props){
+        super(props);
+
+        this.state = {
+          palabraEnviar:"",
+          pistaEnviar:""
+        }
+      }
+
+      goGameView = () => {
+        this.state.palabraEnviar = document.getElementById('palabra').value;
+        this.state.pistaEnviar = document.getElementById('pista').value;
+
+        SocketCliente.procesarDatos(this.state.palabraEnviar,this.state.pistaEnviar);
+
+        document.getElementById('palabra').value= '';
+        document.getElementById('pista').value = '';
+      };
+
+      render() {
+
+      return ( 
         <div className='Inicio'>
           <div className='cajas-text'>
-            <input 
+            <input
+              id='palabra'
               placeholder='Palabra a adivinar'
               type='text'
             />
-            <input  
+            <input
+              id='pista'
               type='text' 
               placeholder='Pista' 
             />
           </div>
           <div className='button-init'>       
             <p
-              onClick={()=> history.push('./Gameview')}
+              onClick={ this.goGameView }
             >
               Aceptar y Enviar
             </p>
           </div>
         </div>
-      );
+        )
+      } 
     }
-  
-export default withRouter(Inicio);
+export default Inicio;

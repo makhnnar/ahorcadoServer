@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 
 import './GameView.css';
+import SocketCliente from '../../socket/SocketCliente';
 
 import { 
   Redirect,
@@ -10,12 +11,17 @@ import {
   Route
 } from 'react-router-dom'; 
 
-class GameView extends React.Component {
+class GameView extends Component {
     
     constructor(props){
       super(props);
+      
       this.state={
-        Abandonar:false
+        Abandonar:false,
+        palabraRecibir:"",
+        pistaRecibir:"",
+        palabraOculta:"",
+        text:""
       }
     }
 
@@ -24,13 +30,30 @@ class GameView extends React.Component {
       this.setState({Abandonar});
     }
 
+    componentDidMount(){     
+      SocketCliente.recibirPalabra(
+        (palabraRecibir,pistaRecibir,palabraOculta) => {
+          this.setState({palabraRecibir,pistaRecibir,palabraOculta});
+        } 
+      );
+    }
+
+    ingresar = () => {
+      this.state.text = document.getElementById('letra').value;
+      SocketCliente.ingresarLetra(this.state.text,(palabraOculta) => {
+          this.setState({palabraOculta});
+        }
+      );
+      document.getElementById('letra').value = '';
+    }
+
     render() {
 
       return (
         <div className='GameView'>
-            <div className='inf-oponent'>
+            <div className ='inf-oponent'>
                 <p>                                     
-                  Pista  /  N° Oponente  /  Coincidencias / Tiempo    
+                  Pista:{this.state.pistaRecibir}    
                 </p>
             </div>
 
@@ -40,14 +63,14 @@ class GameView extends React.Component {
                   id='letra'
                   placeholder='Letra'
                 />
-                <p id ='button'>
+                <p id ='button' onClick={ this.ingresar }>
                   Ingresar
                 </p>
             </div>
 
             <div className='palabraOculta'>
                 <p>
-                  Palabra Oculta = ********
+                  Palabra Oculta:{this.state.palabraOculta}
                 </p>
             </div>
 

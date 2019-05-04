@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Loading.css';
-import imagenTest from './1amw.gif'
+import imagenTest from './load.png'
 
 import { 
   Route, 
@@ -27,7 +27,7 @@ class Loading extends React.Component {
               <div className='img'
                 onClick={this.goInicio}
                 >
-                  <img src={imagenTest} className="logo" alt="Img" height="150" width="150"/>
+                  <img src={imagenTest} className="logo" alt="Img" height="170" width="170"/>
               </div>
 
                 <div className='texto'>

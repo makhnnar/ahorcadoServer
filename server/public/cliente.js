@@ -61,7 +61,7 @@ var socket = {};
         }
 });
 
-var procesarDatos = function(){
+var procesarDatos = () => {
     let palabraEnviar = document.getElementById('palabra').value,        
         pistaEnviar = document.getElementById('pista').value;
         
@@ -79,7 +79,7 @@ var procesarDatos = function(){
     entradas.close();
 };
 
-var ingresarLetra = function(){
+var ingresarLetra = () => {
     var letra = document.getElementById('letra').value;
         
         letra = letra.toLowerCase();
@@ -107,7 +107,7 @@ var ingresarLetra = function(){
     document.getElementById('letra').value = '';
 };
 
-var ocultarPalabra = function(palabra) {
+var ocultarPalabra = (palabra)  => {
     var mostrar = '';
     for (let h = 0; h < palabra.length; h++) {
         if (aciertos[h] === 1) {
