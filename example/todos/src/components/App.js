@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Footer from './Footer'
 import PropTypes from 'prop-types'
 import AddTodo from '../containers/AddTodo'
 import VisibleTodoList from '../containers/VisibleTodoList'
+import TodoDetails from './TodoDetails'
 
 const App = ({toggle}) => {
   switch(toggle){
@@ -15,9 +15,9 @@ const App = ({toggle}) => {
   		return (
   			<VisibleTodoList/>
   		)
-  	case 'Footer':
+  	case 'Details':
   		return (
-  			<Footer/>
+  			<TodoDetails/>
   		)
   	default:
   		return(

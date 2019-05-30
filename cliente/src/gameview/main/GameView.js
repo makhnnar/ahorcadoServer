@@ -2,48 +2,47 @@ import React, {
   Component 
 } from 'react';
 
+import { connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import './GameView.css';
-import SocketCliente from '../../socket/SocketCliente';
+import SocketCliente from '../socket/SocketCliente';
+import * as reduxActions from '../actions';
 
-import { 
+import{ 
   Redirect,
   withRouter,
   Route
-} from 'react-router-dom'; 
+} from 'react-router-dom';
 
 class GameView extends Component {
     
     constructor(props){
       super(props);
       
-      this.state={
+      this.state ={
         Abandonar:false,
-        palabraRecibir:"",
-        pistaRecibir:"",
-        palabraOculta:"",
         text:""
       }
     }
-
+    
     Abandonar = () =>{
       let Abandonar = true;
       this.setState({Abandonar});
     }
 
-    componentDidMount(){     
-      SocketCliente.recibirPalabra(
-        (palabraRecibir,pistaRecibir,palabraOculta) => {
-          this.setState({palabraRecibir,pistaRecibir,palabraOculta});
-        } 
-      );
+    ComponentDidMount(){
+      SocketCliente.recibirPalabra(this.props.socket,(palabra,pista) => {
+        this.props.dispatch(reduxActions.palabraOponent(palabra,pista));
+      },(palabraOculta) =>  {
+        this.props.dispatch(reduxActions.palabraOculta(palabraOculta));
+      })
     }
 
     ingresar = () => {
       this.state.text = document.getElementById('letra').value;
-      SocketCliente.ingresarLetra(this.state.text,(palabraOculta) => {
-          this.setState({palabraOculta});
-        }
-      );
+      SocketCliente.ingresarLetra(this.props.socket,this.state.text,(mostrar) => {
+        this.props.dispatch(reduxActions.palabraOculta(mostrar));
+      });
       document.getElementById('letra').value = '';
     }
 
@@ -53,7 +52,7 @@ class GameView extends Component {
         <div className='GameView'>
             <div className ='inf-oponent'>
                 <p>                                     
-                  Pista:{this.state.pistaRecibir}    
+                  Pista:{this.props.pistaRecibir}    
                 </p>
             </div>
 
@@ -70,7 +69,7 @@ class GameView extends Component {
 
             <div className='palabraOculta'>
                 <p>
-                  Palabra Oculta:{this.state.palabraOculta}
+                  Palabra Oculta:{this.props.palabraOculta}
                 </p>
             </div>
 
@@ -87,9 +86,21 @@ class GameView extends Component {
             </button>
 
             {this.state.Abandonar && <Redirect to="/Loading"/>}
-
         </div>
       );
     }
   }
-export default GameView;
+
+GameView.propTypes = {
+  pistaRecibir: PropTypes.string.isRequired,
+  palabraOculta: PropTypes.string.isRequired,
+  socket:PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+  pistaRecibir:state.ahorcadoApp.pistaRecibir,
+  palabraOculta:state.ahorcadoApp.palabraOculta,
+  socket:state.ahorcadoApp.socket
+})
+
+export default connect(mapStateToProps)(GameView);

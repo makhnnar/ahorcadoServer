@@ -1,27 +1,39 @@
 import io from "socket.io-client";
+import React from 'react';
+import {connect} from 'react-redux';
 
-//invocacion de componente de mensaje
 class SocketCliente {
-  //TODO: declarar metodos de clases
-  state = {
-    palabraRecibir:"",
-    pistaRecibir:"",
-    palabraEnviar:"",
-    pistaEnviar:"",
-    aciertos : [],
-    socket:{}
+
+state = {
+  palabraRecibir:"",
+  pistaRecibir:"",
+  palabraEnviar:"",
+  pistaEnviar:"",
+  aciertos : [],
+  socket:{},
+  myId:''
 };
+
+construtor(props){
+  //se hacen todas las instancias
+  this.conectarServer();
+  this.ganador();
+  this.jugarAhora();
+  this.iniciarJuego();
+  this.recibirPalabra();
+}
   
 conectarServer(callback){
-    this.state.socket = io('http://localhost:4000');
+    let socket = io('http://localhost:4000');
       this.state.socket.on('enviarCliente', function(msg){
         console.log('RECIBIENDO: '+JSON.stringify(msg));
-        callback(msg.data);
+        //callback(msg.data);
     });
+    callback(socket,msg);
   }
 
-ganador(callback){
-    this.state.socket.on('ganador', function(msg){
+ganador(socket,callback){
+    socket.on('ganador', function(msg){
       if(this.state.myId != msg.id){
         callback(
           'Has Perdido'
@@ -42,52 +54,57 @@ jugarAhora(callback){
     });  
 }
   
-iniciarJuego(callback){
-    this.state.socket.on('iniciarJuego',function(msg){
+iniciarJuego(socket,callback){
+      socket.on('iniciarJuego',function(msg){
       console.log('RECIBIENDO: '+JSON.stringify(msg));
-
-      callback(msg.id,msg.numero,msg.numCuarto);
+      this.state.myId = msg.id;
+      callback(msg.id,msg.numero,numCuarto);
   });
 };  
 
-recibirPalabra(callback){
-   this.state.socket.on('recibirPalabra',function(msg){
+recibirPalabra(socket,callback1,callback2){
+    socket.on('recibirPalabra',function(msg){
           console.log('RECIBIENDO: '+JSON.stringify(msg));
           if (this.state.myId != msg.id) {
+                
+                this.state.palabraRecibir = msg.palabra;   
+                this.state.pistaRecibir = msg.pista;
 
-              this.state.palabraRecibir = msg.palabra;
-              this.state.pistaRecibir = msg.pista;
-                                                 
+                callback1(msg.palabra,msg.pista);
+
               for (var a = 0; a < this.state.palabraRecibir.length; a++) {
-                    this.state.aciertos.push(0);
+                   this.state.aciertos.push(0);
                 }
 
               var mostrar = this.ocultarPalabra(this.state.palabraRecibir);
 
-              callback(this.state.palabraRecibir,this.state.pistaRecibir,mostrar);
+              callback2(mostrar);
           }
   });
 };
 
-procesarDatos(palabraEnviar,pistaEnviar){
-    this.state.palabraEnviar = palabraEnviar;         
+procesarDatos(socket,callback,palabraEnviar,pistaEnviar){
+    this.state.palabraEnviar = palabraEnviar;       
     this.state.pistaEnviar = pistaEnviar;
-        
-        this.state.palabraEnviar = this.state.palabraEnviar.toLowerCase();
     
-    this.state.socket.emit(
+    this.state.palabraEnviar = this.state.palabraEnviar.toLowerCase();
+    
+    callback(palabraEnviar,pistaEnviar);
+
+    socket.emit(
       'eventoCuarto',
-            {
-              io,
-              id_room:this.state.numero_cuarto,
-              evento:'recibirPalabra',
-              info:{id:this.state.myId,palabra:this.state.palabraEnviar,pista:this.state.pistaEnviar}
-            });
+      {
+        io,
+        id_room:this.state.numero_cuarto,
+        evento:'recibirPalabra',
+        info:{id:this.state.myId,palabra:this.state.palabraEnviar,pista:this.state.pistaEnviar}
+      }
+    );
     
 };
 
-ingresarLetra(letra,callback){
-    var letra = letra;       
+ingresarLetra(socket,letra,callback){
+    var letra = letra;
         letra = letra.toLowerCase();
 
     for (let k = 0; k < this.state.palabraRecibir.length; k++) {
@@ -101,31 +118,31 @@ ingresarLetra(letra,callback){
     callback(mostrar);
 
     if (mostrar === this.state.palabraRecibir) {
-        this.state.socket.emit(
+        socket.emit(
           'resultado',
-                {
-                  io,
-                  id_room:this.state.numero_cuarto,                  
-                  evento:'ganador',
-                  info:{id:this.state.myId}
-                });
-      }
+          {
+            io,
+            id_room:this.state.numero_cuarto,                  
+            evento:'ganador',
+            info:{id:this.state.myId}
+          }
+        );
+    }
 };
 
 ocultarPalabra(palabra){
       var mostrar = '';
-
       for (let h = 0; h < palabra.length; h++) {
           if (this.state.aciertos[h] === 1) {
               mostrar = mostrar + palabra[h];
             }else{
               mostrar = mostrar + '*';
             }
-        } 
+        }
         return mostrar; 
   };    
 
 };
 
 const socketCliente = new SocketCliente();
-export default socketCliente;
+export default connect()(SocketCliente);

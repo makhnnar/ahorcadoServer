@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import './Inicio.css';
-import SocketCliente from '../../socket/SocketCliente';
-
+import { connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import SocketCliente from '../socket/SocketCliente';
+import * as reduxActions from '../actions';
 import { 
   Route,
   Redirect, 
   withRouter
-} from 'react-router-dom'; 
+} from 'react-router-dom';
 
 class Inicio extends Component {
       
@@ -20,10 +22,19 @@ class Inicio extends Component {
       }
 
       goGameView = () => {
+
         this.state.palabraEnviar = document.getElementById('palabra').value;
         this.state.pistaEnviar = document.getElementById('pista').value;
 
-        SocketCliente.procesarDatos(this.state.palabraEnviar,this.state.pistaEnviar);
+        SocketCliente.procesarDatos
+        (
+          this.props.socket,
+          (palabraEnviar,pistaEnviar) => {
+            this.props.dispatch(reduxActions.palabraEnviar(palabraEnviar,pistaEnviar))
+          },
+          this.state.palabraEnviar,
+          this.state.pistaEnviar
+        );
 
         document.getElementById('palabra').value= '';
         document.getElementById('pista').value = '';
@@ -56,4 +67,13 @@ class Inicio extends Component {
         )
       } 
     }
-export default Inicio;
+
+Inicio.propTypes = {
+  socket:PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+  socket:state.ahorcadoApp.socket
+})
+
+export default connect(mapStateToProps)(Inicio);

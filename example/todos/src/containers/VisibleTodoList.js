@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import TodoList from '../components/TodoList'
 import { ToggleListModal } from '../actions'
 import { VisibilityFilters } from '../actions'
-import { toggleTodo } from '../actions'
+import { Show_Todo_Details } from '../actions'
 
 const getVisibleTodos = (todos, filter) => {
   switch (filter) {
@@ -22,8 +22,10 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  add: text => dispatch(ToggleListModal(text)),
-  toggleTodo: id => dispatch(toggleTodo(id))
+  add_details:(text,id) => {
+    dispatch(ToggleListModal(text));
+    dispatch(Show_Todo_Details(id));
+  }
 })
 
 export default connect(

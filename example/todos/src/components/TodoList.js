@@ -2,23 +2,39 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Todo from './Todo'
 
-const TodoList = ({ todos, toggleTodo, add }) => (  
-  <div>
-      <ul>
-        {todos.map(todo =>
-          <Todo
-            key={todo.id}
-            {...todo}
-            onClick={() => toggleTodo(todo.id)}
-          />
-        )}
-      </ul>
+const TodoList = ({ todos, add_details }) => {  
 
-      <button onClick={() => add('Add')}>
-        Add
-      </button>
-  </div>
-)
+  if(todos.length > 0){
+
+  return( 
+    <div>
+        <ul>
+          {todos.map(todo =>
+            <Todo
+              key={todo.id}
+              {...todo}
+              onClick={(id) => add_details('Details',id)}
+            /> 
+          )}
+        </ul>
+        
+        <button id="flotant" onClick={() => add_details('Add',0)}>
+          +
+        </button>
+    </div>
+    )
+  }else{
+    return(
+      <div>
+        <p id="agregar">Agregue un todo a la lista</p>
+
+        <button id="flotant" onClick={() => add_details('Add',0)}>
+          +
+        </button>
+      </div> 
+    )
+  }
+}
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
@@ -26,8 +42,7 @@ TodoList.propTypes = {
     completed: PropTypes.bool.isRequired,
     text: PropTypes.string.isRequired
   }).isRequired).isRequired,
-  toggleTodo: PropTypes.func.isRequired,
-  add: PropTypes.func.isRequired
+  add_details: PropTypes.func.isRequired
 }
 
 export default TodoList

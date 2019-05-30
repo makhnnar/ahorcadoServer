@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import SocketCliente from '../../socket/SocketCliente';
-
+import { connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import SocketCliente from '../SocketCliente';
+import * as reduxActions from '../actions';
 import { 
   Redirect,
   withRouter,
   Route
 } from 'react-router-dom';
 
-import './wellcome.css';
+import './Wellcome.css';
 
 class Wellcome extends Component {
   constructor(props){
@@ -15,36 +17,27 @@ class Wellcome extends Component {
 
     this.state = {
         mensaje:"",
-        id:"",
-        numeroJugador:"",
-        numCuarto:"",
         goInicio:false
     }
   }
+
+  componentDidMount(){
+    SocketCliente.conectarServer((socket,mensaje) => {
+        this.props.dispatch(reduxActions.socket(socket));
+        this.setState({mensaje})
+    })
+
+    SocketCliente.iniciarJuego(this.props.socket,(id,numero,numCuarto) => {
+        this.props.dispatch(reduxActions.idNumJugador(id,numero));
+        this.props.dispatch(reduxActions.numSala(numCuarto));
+    })
+  }
+
 
   goInicio = () => {
     let goInicio = true;
     this.setState({goInicio});
   }
-
-
-  componentDidMount(){   
-    SocketCliente.conectarServer((mensaje) => {
-            this.setState({mensaje});
-      }
-    );
-
-    SocketCliente.iniciarJuego((myId,numeroJugador,numCuarto) => {
-        this.setState({id:myId,numeroJugador:numeroJugador,numCuarto:numCuarto});
-      }
-    );
-
-    SocketCliente.jugarAhora(() => {
-
-        this.goInicio();
-
-    });
-  };
 
   render() {
     return (      
@@ -56,12 +49,12 @@ class Wellcome extends Component {
       	</div>
         <div className='ID'>
           <p>
-            ID: {this.state.id}
+            ID: {this.props.id}
           </p>
         </div>
         <div className='numeroJugador'>
           <p>
-            Numero de Jugador: {this.state.numeroJugador}
+            Numero de Jugador:{this.props.numeroJugador}
           </p>
         </div>
          {this.state.goInicio && <Redirect to="/Inicio"/>}
@@ -70,4 +63,18 @@ class Wellcome extends Component {
   }
 }
 
-export default Wellcome;
+Wellcome.propTypes = {
+  id:PropTypes.string.isRequired,
+  numCuarto:PropTypes.number.isRequired,
+  numeroJugador:PropTypes.number.isRequired,
+  socket:PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+  id:state.ahorcadoApp.id,
+  numCuarto:state.ahorcadoApp.numCuarto,
+  numeroJugador:state.ahorcadoApp.numeroJugador,
+  socket:state.ahorcadoApp.socket
+})
+
+export default connect(mapStateToProps)(Wellcome)
