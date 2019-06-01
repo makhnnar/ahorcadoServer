@@ -1,21 +1,21 @@
-.boton {
+.button{
 	text-align: center;
 	display:flex;
-	flex:1;
 	flex-direction:row;
-  	background:#e91e63;
- 	margin:40px;
+  	background:#33BFFF;
  	justify-content:center;
- 	align-items:center;	
- 	min-width:60%;
+ 	align-items:center;
+ 	height:100px;	
+ 	width:600px;
  	border-radius:10px;
+ 	font-family:Arial, Helvetica, sans-serif
 }
 
-.img {
+.img{
 	margin-right:20px;
 }
 
-.textoBoton {
+.text{
 	color:black; 
 }
 

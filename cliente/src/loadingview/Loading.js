@@ -1,21 +1,45 @@
 import React, { Component } from 'react';
 import './Loading.css';
-import imagenTest from './1amw.gif'
+import imagenTest from './load.png'
 
-export default class Loading extends React.Component {
-  render() {
-    return (
-      <div className='Loading'>
-        <div className='img'>
-            <img src={imagenTest} alt="Img" height="400" width="400"/>
-        </div>
-        <div className='texto'>
-          <p>
-            Cargando
-          </p>
-        </div>
-      </div>
-    );
+import { 
+  Route, 
+  Redirect,
+  withRouter
+} from "react-router-dom";
+
+class Loading extends React.Component {
+  
+  constructor(props){
+    super(props);
+    this.state={
+        toInicio:false
+    }
   }
-}
 
+  goInicio = () =>{
+    let toInicio = true;
+    this.setState({toInicio});
+  }
+    render() {
+      return (
+        <div className='Loading'>
+              <div className='img'
+                onClick={this.goInicio}
+                >
+                  <img src={imagenTest} className="logo" alt="Img" height="170" width="170"/>
+              </div>
+
+                <div className='texto'>
+                    <p>
+                      Espere.Por Favor
+                    </p>
+                </div>
+
+              {this.state.toInicio && <Redirect to="/Inicio"/>}
+        </div>
+      );
+    }
+  }
+
+export default Loading;

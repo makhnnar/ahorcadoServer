@@ -3,13 +3,18 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import Login from './views/login/Login';
-import Forgot from './views/forgot/Forgot';
+
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import rootReducer from './reducers'
+
+const store = createStore(rootReducer)
 
 ReactDOM.render(
-		<App />, 
-		document.getElementById('container')
+  	<Provider store={store}>
+    	<App />
+  	</Provider>, 
+	document.getElementById('container')
 );
 
 serviceWorker.unregister();

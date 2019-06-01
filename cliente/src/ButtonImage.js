@@ -1,18 +1,34 @@
 import React, { Component } from 'react';
-import './Css/ButtonImage.css';
-
 
 export default class ButtonImage extends React.Component {
+  constructor(props){
+    super(props);
+    this.state={
+      text:""
+    }
+  }
+
+  prueba = () => {
+    alert(this.state.text);
+  }
+
+
   render() {
     return (
-      <div className="boton">
-        <div className="img">
-            <img src={imagenTest} alt="Img" height="35" width="35"/>
-        </div>
-        <div className="textoBoton">
-          <p>
-            JUGAR
-          </p>
+      <div>
+        <div className="text">
+          <input
+            value={this.state.text}
+            type='text'  
+            id='letra'
+            placeholder='Letra'
+          />
+
+          <button
+              onClick = { this.prueba }
+            >
+              Imprimir
+            </button>
         </div>
       </div>
     );
