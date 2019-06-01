@@ -1,0 +1,99 @@
+#flotant{
+  width:60px;
+  height:60px;
+  border-radius:100%;
+  background:#F44336;
+  right:0;
+  bottom:0;
+  position:absolute;
+  margin-right:16px;
+  margin-bottom:16px;
+  border:none;
+  outline:none;
+  color:#FFF;
+  font-size:36px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  transition:.3s;  
+}
+
+#agregar{
+	text-align: center;
+	margin-top: 300px;
+	font-family: Vegur, 'PT Sans', Verdana, sans-serif;
+	font-size: 23px;
+}
+
+#modal{
+	display: flex;
+	flex: 1;	
+	justify-content: center;
+	margin:100px;
+	width: 1110px;
+	border-radius: 5px;
+	background:#256167;
+	flex-direction: row;
+}
+
+#form{
+	display: flex;
+	flex: 1;	
+	justify-content: center;
+	flex-direction: column;
+}
+
+#div{
+	display: flex;
+	flex: 1;	
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+}
+
+.textArea{
+	flex: 1;
+	margin:20px;
+}
+
+#Details{
+	font-family: Vegur, 'PT Sans', Verdana, sans-serif;
+	font-size: 20px;
+	text-align:center;
+	margin: 210px;
+	background: #28C7D7;
+	border-radius: 9px;	
+}
+.back{
+	width:80px;
+	background:#256167;
+	color:white;
+}
+
+input{
+	flex:1;
+	height: 40px;
+	margin: 10px;
+	border-radius:5px;
+}
+
+li{
+	font-family: Vegur, 'PT Sans', Verdana, sans-serif;
+	font-size: 20px;	
+}
+button{
+	flex: 2;
+	margin:  15px;
+ 	height: 40px;
+  	border-radius: 6px; 	
+	border-radius:5px;
+}
+
+*, *:before, *:after { box-sizing: border-box; }
+body { height: 100vh; background: #ccc; overflow: hidden; }
+
+.modal-container {
+  margin: 60px auto;
+  padding-top: 0px;
+  position: relative;
+  width: 160px;
+  height: 400px;    
+}
