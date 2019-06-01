@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import './Inicio.css';
 import { connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import SocketCliente from '../socket/SocketCliente';
-import * as reduxActions from '../actions';
+import SocketCliente from '../../socket/SocketCliente';
+import * as reduxActions from '../../actions';
 import { 
   Route,
   Redirect, 

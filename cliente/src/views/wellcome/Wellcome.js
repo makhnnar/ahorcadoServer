@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import SocketCliente from '../SocketCliente';
-import * as reduxActions from '../actions';
+import SocketCliente from '../../socket/SocketCliente';
+import * as reduxActions from '../../actions';
 import { 
   Redirect,
   withRouter,
@@ -22,10 +22,12 @@ class Wellcome extends Component {
   }
 
   componentDidMount(){
-    SocketCliente.conectarServer((socket,mensaje) => {
-        this.props.dispatch(reduxActions.socket(socket));
-        this.setState({mensaje})
-    })
+    SocketCliente.conectarServer
+    (
+      (socket) => {
+        this.props.dispatch(reduxActions.socket(socket))
+    }
+    )
 
     SocketCliente.iniciarJuego(this.props.socket,(id,numero,numCuarto) => {
         this.props.dispatch(reduxActions.idNumJugador(id,numero));

@@ -21,16 +21,16 @@ construtor(props){
   this.jugarAhora();
   this.iniciarJuego();
   this.recibirPalabra();
-}
+};
   
 conectarServer(callback){
     let socket = io('http://localhost:4000');
-      this.state.socket.on('enviarCliente', function(msg){
+      socket.on('enviarCliente', function(msg){
         console.log('RECIBIENDO: '+JSON.stringify(msg));
         //callback(msg.data);
     });
-    callback(socket,msg);
-  }
+    callback(socket);
+};
 
 ganador(socket,callback){
     socket.on('ganador', function(msg){
@@ -58,7 +58,7 @@ iniciarJuego(socket,callback){
       socket.on('iniciarJuego',function(msg){
       console.log('RECIBIENDO: '+JSON.stringify(msg));
       this.state.myId = msg.id;
-      callback(msg.id,msg.numero,numCuarto);
+      callback(msg.id,msg.numero,msg.numCuarto);
   });
 };  
 

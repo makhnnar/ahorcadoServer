@@ -5,8 +5,8 @@ import React, {
 import { connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import './GameView.css';
-import SocketCliente from '../socket/SocketCliente';
-import * as reduxActions from '../actions';
+import SocketCliente from '../../socket/SocketCliente';
+import * as reduxActions from '../../actions';
 
 import{ 
   Redirect,
@@ -30,7 +30,7 @@ class GameView extends Component {
       this.setState({Abandonar});
     }
 
-    ComponentDidMount(){
+    componentDidMount(){
       SocketCliente.recibirPalabra(this.props.socket,(palabra,pista) => {
         this.props.dispatch(reduxActions.palabraOponent(palabra,pista));
       },(palabraOculta) =>  {
