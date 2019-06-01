@@ -1,6 +1,5 @@
 import io from "socket.io-client";
 import React from 'react';
-import {connect} from 'react-redux';
 
 class SocketCliente {
 
@@ -23,7 +22,7 @@ construtor(props){
   this.recibirPalabra();
 };
   
-conectarServer(callback){
+conectarServer = (callback) => {
     let socket = io('http://localhost:4000');
       socket.on('enviarCliente', function(msg){
         console.log('RECIBIENDO: '+JSON.stringify(msg));
@@ -145,4 +144,4 @@ ocultarPalabra(palabra){
 };
 
 const socketCliente = new SocketCliente();
-export default connect()(SocketCliente);
+export default socketCliente;

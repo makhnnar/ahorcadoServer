@@ -12,12 +12,12 @@ import Loading from './loadingview/Loading';
 import GameView from './gameview/main/GameView';
 import Inicio from './gameview/setwords/Inicio';
 
-
 import Login from './views/login/Login';
 import Signup from "./views/signup/Signup";
 import Forgot from "./views/forgot/Forgot";
 import Alone from "./views/alone/Alone";
 import Vs from "./views/vs/Vs";
+import Wellcome from './views/wellcome/Wellcome';
 
 class App extends React.Component {
   render() {
@@ -25,7 +25,9 @@ class App extends React.Component {
     	<BrowserRouter>
     		<Switch>
     			
-          <Route path="/Loading" component={Loading}/>
+          <Route exact path="/Loading" component={Loading}/>
+
+          <Route path="/Wellcome" component={Wellcome}/>
     			
           <Route path="/Inicio" component={Inicio}/>
     			
